@@ -12,6 +12,8 @@ The AWS SPA Hosting Kit provides a complete infrastructure setup for hosting you
 - **Email Notifications**: Optional deployment status alerts
 - **One Command Deploy**: Simple setup and deployment
 
+Each deployment is identified by a `projectName`, allowing multiple SPAs to be hosted safely in the same AWS account.
+
 This kit can be used both to host a new SPA from scratch and to migrate an existing SPA to AWS. The design intentionally keeps infrastructure and application code separate, allowing teams to adopt AWS-native hosting and CI/CD without modifying their existing repositories or workflows.
 
 This kit is designed for teams that want AWS-native hosting and CI/CD without adopting a new frontend framework, service control plane, or modifying their existing SPA repository.
@@ -209,7 +211,8 @@ SpaHostingStack.CloudFrontUrl = https://d1234567890.cloudfront.net
 ### Required Fields
 
 ```yaml
-projectName: "my-spa-project"  # Unique identifier for pipeline and resource naming
+projectName: "my-spa-project"  # Unique identifier (namespace) for all AWS resources
+                                # Changing this creates NEW infrastructure
 
 github:
   repositoryUrl: "https://github.com/owner/repo"  # Your SPA repository

@@ -150,7 +150,7 @@ if (!validation.valid) {
 
 ```typescript
 interface HostingConfig {
-  projectName: string;           // Required: Unique project identifier
+  projectName: string;           // Required: Unique project identifier (namespace/identity key)
   github: {
     repositoryUrl: string;      // Required: GitHub repo URL
     branch?: string;             // Optional: defaults to "main"
@@ -191,6 +191,28 @@ The loader applies these defaults:
 4. **Email**: Must be valid email format if provided
 5. **Domain**: If `customDomain` is set, `certificateArn` is required
 6. **Region Warning**: Warns if not `us-east-1` with custom domain (ACM requirement)
+
+### Important: projectName as Namespace
+
+The `projectName` field serves as a **namespace and identity key** for your infrastructure, not a display name:
+
+- **Purpose**: Uniquely identifies AWS resources (pipeline, connection, SNS topic, etc.)
+- **Immutability**: Changing `projectName` creates **new infrastructure**, it does not rename existing resources
+- **Naming Convention**: Use descriptive, permanent identifiers (e.g., `my-company-marketing-site`, not `temp-test`)
+- **Multi-Deployment**: Different `projectName` values allow multiple SPAs in the same AWS account
+- **No Renaming**: To "rename" a project, you must deploy new infrastructure and destroy the old stack
+
+**Example Impact**:
+```yaml
+# Original deployment
+projectName: "my-spa-v1"
+# Creates: my-spa-v1-hosting-pipeline, my-spa-v1-github, etc.
+
+# Changing projectName
+projectName: "my-spa-v2"
+# Creates: NEW resources (my-spa-v2-hosting-pipeline, my-spa-v2-github, etc.)
+# Old resources (my-spa-v1-*) remain until you run `cdk destroy`
+```
 
 ## CDK Stack Architecture
 

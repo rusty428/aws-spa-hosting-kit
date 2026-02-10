@@ -5,7 +5,9 @@
 # REQUIRED: Project Name
 # ============================================================================
 # Unique identifier for this project (used in pipeline, connection, and resource names)
+# This is a namespace/identity key, NOT a display name
 # Use alphanumeric characters, hyphens, and underscores only
+# WARNING: Changing this value will create NEW infrastructure (not rename existing)
 projectName: "my-spa-project"
 
 # ============================================================================
