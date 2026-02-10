@@ -1,6 +1,16 @@
 # AWS SPA Hosting Kit
 
+**Copyright © 2026 Rusty Nations. Released under MIT License.**
+
 Infrastructure-as-code solution for hosting Single Page Applications on AWS with automated CI/CD pipelines.
+
+## Design Tenets
+
+- **Infrastructure-only**: Application code is never modified
+- **AWS-native primitives**: No additional control planes or frameworks
+- **Secure by default**: Private S3, Origin Access Control, least privilege IAM
+- **Configuration-driven**: Not framework-driven
+- **Easy to start, easy to extend, safe to abandon**
 
 ## Overview
 
@@ -70,17 +80,24 @@ If configured, SNS sends email notifications for:
 
 ## Architecture
 
-```
-GitHub Repo → GitHub Connection → CodePipeline → CodeBuild → S3 → CloudFront (OAC)
-                                        ↓
-                                  SNS Notifications
-                                        ↓
-                                  Lambda (Cache Invalidation)
+### High-Level Flow
+
+```mermaid
+graph LR
+    Repo[Source Repository] --> Conn[CodeConnections]
+    Conn --> Pipe[CodePipeline]
+    Pipe --> Build[CodeBuild]
+    Build --> S3[S3 Bucket<br/>Private]
+    S3 --> CF[CloudFront<br/>OAC]
+    CF --> Users[End Users]
+    Pipe --> SNS[SNS<br/>Notifications]
+    Pipe --> Lambda[Lambda<br/>Cache Invalidation]
+    Lambda --> CF
 ```
 
-**Security:** S3 bucket is private with CloudFront Origin Access Control (OAC) for secure access.
+**Security**: S3 bucket is private with CloudFront Origin Access Control (OAC) for secure access.
 
-**SPA Routing:** CloudFront error response mapping (404/403 → index.html) ensures client-side routing works correctly.
+**SPA Routing**: CloudFront error response mapping (404/403 → index.html) ensures client-side routing works correctly.
 
 ## Core Components
 
@@ -398,6 +415,44 @@ The AI will help you:
 - Understand post-deployment steps
 
 **Note**: The AI follows this repository's documentation and does not replace reviewing README.md and PREREQUISITES.md.
+
+## Support & Stability
+
+This project is provided as infrastructure scaffolding.
+
+- **Breaking changes** will be called out in release notes (see [CHANGELOG.md](CHANGELOG.md))
+- **Configuration compatibility** will be preserved when possible
+- **Issues and PRs** are welcome; support is best-effort
+- **Versioning** follows [Semantic Versioning](https://semver.org/)
+
+## IAM Permissions Summary
+
+This kit requires permission to create and manage:
+
+- **S3 buckets** (static assets storage)
+- **CloudFront distributions** (CDN delivery)
+- **CodePipeline and CodeBuild resources** (CI/CD automation)
+- **CodeConnections** (source repository integration)
+- **IAM roles** (service execution with least privilege)
+- **SNS topics and subscriptions** (deployment notifications)
+- **Lambda functions** (CloudFront cache invalidation)
+- **EventBridge rules** (event-driven automation)
+
+See [PREREQUISITES.md](PREREQUISITES.md) for detailed permission requirements.
+
+## Safe Teardown
+
+All resources created by this kit are namespaced under your `projectName`. Running `npm run destroy` removes only resources created for that specific project, making it safe to use in shared AWS accounts. Other projects and resources remain untouched.
+
+## Known Limitations
+
+- **No PR preview environments**: Pipeline triggers only on configured branch
+- **No blue/green deployments**: Direct S3 replacement with cache invalidation
+- **Static-only output**: Server-side rendering (SSR) is out of scope
+- **Single-region deployment**: Multi-region replication not included
+- **No built-in auth**: Authentication/authorization must be handled separately
+
+These are intentional scope boundaries for v1. Future versions may address some of these.
 
 ## License
 
