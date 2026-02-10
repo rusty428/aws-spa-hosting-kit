@@ -3,6 +3,7 @@
  */
 
 export interface HostingConfig {
+  projectName: string;
   github: GitHubConfig;
   aws: AwsConfig;
   domain?: DomainConfig;

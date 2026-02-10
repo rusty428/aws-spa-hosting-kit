@@ -150,6 +150,7 @@ if (!validation.valid) {
 
 ```typescript
 interface HostingConfig {
+  projectName: string;           // Required: Unique project identifier
   github: {
     repositoryUrl: string;      // Required: GitHub repo URL
     branch?: string;             // Optional: defaults to "main"
@@ -184,11 +185,12 @@ The loader applies these defaults:
 
 ### Validation Rules
 
-1. **GitHub URL**: Must match `https://github.com/{owner}/{repo}`
-2. **AWS Region**: Must be a valid AWS region code
-3. **Email**: Must be valid email format if provided
-4. **Domain**: If `customDomain` is set, `certificateArn` is required
-5. **Region Warning**: Warns if not `us-east-1` with custom domain (ACM requirement)
+1. **Project Name**: Must contain only alphanumeric characters, hyphens, and underscores
+2. **GitHub URL**: Must match `https://github.com/{owner}/{repo}`
+3. **AWS Region**: Must be a valid AWS region code
+4. **Email**: Must be valid email format if provided
+5. **Domain**: If `customDomain` is set, `certificateArn` is required
+6. **Region Warning**: Warns if not `us-east-1` with custom domain (ACM requirement)
 
 ## CDK Stack Architecture
 
@@ -291,7 +293,7 @@ npm run destroy
 
 1. **Authorize Source Repository Connection**:
    - Go to AWS Console → Developer Tools → Settings → Connections
-   - Find "spa-hosting-github" connection (or your custom connection name)
+   - Find your connection (named `{projectName}-github`)
    - Click "Update pending connection"
    - Complete OAuth flow with your source code provider (GitHub, Bitbucket, GitLab, etc.)
 

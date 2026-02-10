@@ -2,6 +2,13 @@
 # Copy this file to config.yml and customize for your SPA
 
 # ============================================================================
+# REQUIRED: Project Name
+# ============================================================================
+# Unique identifier for this project (used in pipeline, connection, and resource names)
+# Use alphanumeric characters, hyphens, and underscores only
+projectName: "my-spa-project"
+
+# ============================================================================
 # REQUIRED: GitHub Repository Configuration
 # ============================================================================
 github:

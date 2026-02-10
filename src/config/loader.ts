@@ -75,6 +75,18 @@ export class ConfigLoader {
     const warnings: string[] = [];
 
     // Validate required fields
+    if (!config.projectName) {
+      errors.push('Missing required field: projectName');
+    } else {
+      // Validate project name format (alphanumeric, hyphens, underscores only)
+      const projectNamePattern = /^[a-zA-Z0-9-_]+$/;
+      if (!projectNamePattern.test(config.projectName)) {
+        errors.push(
+          'Invalid projectName format. Use only alphanumeric characters, hyphens, and underscores.'
+        );
+      }
+    }
+
     if (!config.github) {
       errors.push('Missing required field: github');
     } else {

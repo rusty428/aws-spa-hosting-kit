@@ -44,7 +44,7 @@ When you run `npm run deploy`, AWS CDK synthesizes and deploys CloudFormation te
 
 After initial deployment, you authorize the connection in the AWS Console:
 - Navigate to Developer Tools → Settings → Connections
-- Find "spa-hosting-github" connection
+- Find your connection (named `{projectName}-github`)
 - Complete OAuth authorization with your source code provider
 
 **Supported Providers**: GitHub, Bitbucket, GitLab, GitHub Enterprise Server, GitLab self-managed, and Azure DevOps
@@ -156,6 +156,8 @@ cp config/config.example.yml config/config.yml
 Edit `config/config.yml` with your settings:
 
 ```yaml
+projectName: "my-spa-project"
+
 github:
   repositoryUrl: "https://github.com/your-username/your-spa-repo"
   branch: "main"
@@ -186,7 +188,7 @@ This will:
 After deployment, you'll see output with a Connection ARN. You need to authorize this connection:
 
 1. Go to AWS Console → Developer Tools → Settings → Connections
-2. Find the "spa-hosting-github" connection
+2. Find the connection (named after your `projectName`, e.g., "my-spa-project-github")
 3. Click "Update pending connection"
 4. Complete the OAuth authorization with your source code provider
 
@@ -207,6 +209,8 @@ SpaHostingStack.CloudFrontUrl = https://d1234567890.cloudfront.net
 ### Required Fields
 
 ```yaml
+projectName: "my-spa-project"  # Unique identifier for pipeline and resource naming
+
 github:
   repositoryUrl: "https://github.com/owner/repo"  # Your SPA repository
   
@@ -298,6 +302,7 @@ For detailed information about the CDK infrastructure, deployment process, and d
 ### Configuration validation failed
 
 Make sure your `config.yml` has:
+- Valid project name (alphanumeric, hyphens, underscores only)
 - Valid GitHub repository URL (format: `https://github.com/owner/repo`)
 - Valid AWS region
 - Valid email format (if notifications enabled)

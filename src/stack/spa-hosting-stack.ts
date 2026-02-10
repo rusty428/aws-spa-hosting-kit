@@ -214,7 +214,7 @@ export class SpaHostingStack extends cdk.Stack {
     }
 
     const connection = new codeconnections.CfnConnection(this, 'GitHubConnection', {
-      connectionName: 'spa-hosting-github',
+      connectionName: `${this.config.projectName}-github`,
       providerType: 'GitHub',
     });
 
@@ -313,7 +313,7 @@ export class SpaHostingStack extends cdk.Stack {
    */
   private createPipeline(): codepipeline.Pipeline {
     const pipeline = new codepipeline.Pipeline(this, 'SpaPipeline', {
-      pipelineName: 'spa-hosting-pipeline',
+      pipelineName: `${this.config.projectName}-hosting-pipeline`,
       restartExecutionOnUpdate: true,
       stages: [
         this.createSourceStage(),
@@ -421,8 +421,8 @@ export class SpaHostingStack extends cdk.Stack {
     }
 
     const topic = new sns.Topic(this, 'NotificationTopic', {
-      displayName: 'SPA Hosting Notifications',
-      topicName: 'spa-hosting-notifications',
+      displayName: `${this.config.projectName} Hosting Notifications`,
+      topicName: `${this.config.projectName}-hosting-notifications`,
     });
 
     // Create email subscription
