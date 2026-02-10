@@ -32,7 +32,10 @@ You must have **all** of the following before deploying this kit.
   - GitHub Enterprise Server
   - GitLab self-managed
   - Azure DevOps
-- **OAuth authorization capability** via AWS CodeConnections (requires access to AWS Console)
+- **Post-deployment**: Ability to authorize OAuth connection via AWS Console
+  - Requires AWS Console access (not just CLI)
+  - Requires account access to your source code provider for OAuth flow
+  - One-time setup per project
 
 ## SPA Requirements
 
