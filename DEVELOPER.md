@@ -15,9 +15,7 @@ This guide provides detailed information for developers working on the AWS SPA H
 
 ## Development Setup
 
-### Prerequisites
-
-Before starting development, ensure you have all required tools and permissions. See [PREREQUISITES.md](PREREQUISITES.md) for the complete checklist.
+This document assumes all prerequisites listed in [PREREQUISITES.md](PREREQUISITES.md) are already met.
 
 ### Initial Setup
 

@@ -127,13 +127,7 @@ Built with AWS CDK (TypeScript), providing type safety, IDE autocomplete, and th
 
 ## Prerequisites
 
-Before deploying, ensure you have all required tools and permissions. See [PREREQUISITES.md](PREREQUISITES.md) for the complete checklist.
-
-Quick summary:
-- **Node.js** 18+ and npm
-- **AWS CLI** configured with credentials (`aws configure`)
-- **AWS Account** with appropriate permissions
-- **Source Repository** containing your SPA (GitHub, Bitbucket, GitLab, GitHub Enterprise Server, GitLab self-managed, or Azure DevOps)
+See [PREREQUISITES.md](PREREQUISITES.md) for a complete checklist of required tools, permissions, and accounts.
 
 ## Quick Start
 
