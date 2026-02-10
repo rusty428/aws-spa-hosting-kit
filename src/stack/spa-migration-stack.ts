@@ -91,22 +91,23 @@ export class SpaMigrationStack extends cdk.Stack {
 
   /**
    * Create CloudFront distribution for CDN delivery
-   * Uses Origin Access Control for secure S3 access
+   * Uses Origin Access Control (OAC) - the modern AWS-recommended approach for secure S3 access
    */
   private createCloudFrontDistribution(bucket: s3.Bucket): cloudfront.Distribution {
-    // Create Origin Access Identity for CloudFront to access S3
-    const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
-      comment: 'OAI for SPA Migration Kit',
+    // Create Origin Access Control (OAC) - modern replacement for OAI
+    const originAccessControl = new cloudfront.CfnOriginAccessControl(this, 'OAC', {
+      originAccessControlConfig: {
+        name: 'spa-migration-oac',
+        originAccessControlOriginType: 's3',
+        signingBehavior: 'always',
+        signingProtocol: 'sigv4',
+        description: 'Origin Access Control for SPA Migration Kit',
+      },
     });
-
-    // Grant CloudFront read access to the bucket
-    bucket.grantRead(originAccessIdentity);
 
     const distribution = new cloudfront.Distribution(this, 'SpaDistribution', {
       defaultBehavior: {
-        origin: origins.S3BucketOrigin.withOriginAccessIdentity(bucket, {
-          originAccessIdentity,
-        }),
+        origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         compress: true,
       },
@@ -127,6 +128,23 @@ export class SpaMigrationStack extends cdk.Stack {
       ],
     });
 
+    // Apply OAC to the CloudFront distribution's S3 origin
+    const cfnDistribution = distribution.node.defaultChild as cloudfront.CfnDistribution;
+    cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.OriginAccessControlId', originAccessControl.attrId);
+    cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.S3OriginConfig.OriginAccessIdentity', '');
+
+    // Grant CloudFront OAC read access to the bucket via bucket policy
+    bucket.addToResourcePolicy(new iam.PolicyStatement({
+      actions: ['s3:GetObject'],
+      resources: [bucket.arnForObjects('*')],
+      principals: [new iam.ServicePrincipal('cloudfront.amazonaws.com')],
+      conditions: {
+        StringEquals: {
+          'AWS:SourceArn': `arn:aws:cloudfront::${this.account}:distribution/${distribution.distributionId}`,
+        },
+      },
+    }));
+
     // Output CloudFront URL
     new cdk.CfnOutput(this, 'CloudFrontUrl', {
       value: `https://${distribution.distributionDomainName}`,
@@ -135,6 +153,55 @@ export class SpaMigrationStack extends cdk.Stack {
 
     return distribution;
   }
+
+  /* 
+   * LEGACY OPTION: Origin Access Identity (OAI)
+   * 
+   * OAI is the older method for securing S3 access from CloudFront.
+   * AWS recommends using Origin Access Control (OAC) for new deployments.
+   * 
+   * To use OAI instead of OAC, replace the createCloudFrontDistribution method above with:
+   * 
+   * private createCloudFrontDistribution(bucket: s3.Bucket): cloudfront.Distribution {
+   *   const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
+   *     comment: 'OAI for SPA Migration Kit',
+   *   });
+   * 
+   *   bucket.grantRead(originAccessIdentity);
+   * 
+   *   const distribution = new cloudfront.Distribution(this, 'SpaDistribution', {
+   *     defaultBehavior: {
+   *       origin: origins.S3BucketOrigin.withOriginAccessIdentity(bucket, {
+   *         originAccessIdentity,
+   *       }),
+   *       viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+   *       compress: true,
+   *     },
+   *     defaultRootObject: 'index.html',
+   *     errorResponses: [
+   *       {
+   *         httpStatus: 404,
+   *         responseHttpStatus: 200,
+   *         responsePagePath: '/index.html',
+   *         ttl: cdk.Duration.minutes(5),
+   *       },
+   *       {
+   *         httpStatus: 403,
+   *         responseHttpStatus: 200,
+   *         responsePagePath: '/index.html',
+   *         ttl: cdk.Duration.minutes(5),
+   *       },
+   *     ],
+   *   });
+   * 
+   *   new cdk.CfnOutput(this, 'CloudFrontUrl', {
+   *     value: `https://${distribution.distributionDomainName}`,
+   *     description: 'CloudFront distribution URL'
+   *   });
+   * 
+   *   return distribution;
+   * }
+   */
 
   /**
    * Create CodeStar Connection for GitHub integration

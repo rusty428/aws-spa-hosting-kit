@@ -15,10 +15,12 @@ The AWS SPA Migration Kit provides a complete infrastructure setup for hosting y
 ## Architecture
 
 ```
-GitHub Repo → CodeStar Connection → CodePipeline → CodeBuild → S3 → CloudFront
+GitHub Repo → CodeStar Connection → CodePipeline → CodeBuild → S3 → CloudFront (OAC)
                                           ↓
                                     SNS Notifications
 ```
+
+**Security:** S3 bucket is private with CloudFront Origin Access Control (OAC) for secure access.
 
 ## Prerequisites
 
