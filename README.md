@@ -16,24 +16,119 @@ This kit can be used both to host a new SPA from scratch and to migrate an exist
 
 This kit is designed for teams that want AWS-native hosting and CI/CD without adopting a new frontend framework, service control plane, or modifying their existing SPA repository.
 
+## How It Works
+
+### Step 1: Configuration & Validation
+
+The kit loads your configuration from `config/config.yml` and validates all required fields:
+- GitHub repository URL and branch
+- AWS region and account settings
+- Optional notification email
+- Optional build commands and output directory
+
+The `ConfigLoader` class handles YAML parsing, applies sensible defaults, and validates configuration against AWS service requirements.
+
+### Step 2: Infrastructure Deployment
+
+When you run `npm run deploy`, AWS CDK synthesizes and deploys CloudFormation templates that create:
+
+1. **S3 Bucket**: Private bucket with encryption enabled and all public access blocked
+2. **CloudFront Distribution**: CDN with Origin Access Control (OAC) for secure S3 access
+3. **CodeStar Connection**: GitHub OAuth integration for repository access
+4. **CodeBuild Project**: Build environment with Node.js 20 runtime
+5. **CodePipeline**: Three-stage pipeline (Source → Build → Deploy)
+6. **SNS Topic**: Optional notification system for deployment events
+7. **Lambda Functions**: CloudFront cache invalidation trigger
+
+### Step 3: Source Repository Authorization
+
+After initial deployment, you authorize the connection in the AWS Console:
+- Navigate to Developer Tools → Settings → Connections
+- Find "spa-hosting-github" connection
+- Complete OAuth authorization with your source code provider
+
+**Supported Providers**: GitHub, Bitbucket, GitLab, GitHub Enterprise Server, GitLab self-managed, and Azure DevOps
+
+### Step 4: Automated Deployments
+
+Once authorized, the pipeline automatically triggers on every push to your configured branch:
+
+1. **Source Stage**: GitHub connection detects push and fetches source code
+2. **Build Stage**: CodeBuild runs `npm ci` and `npm run build` to create production assets
+3. **Deploy Stage**: Built artifacts are uploaded to S3 bucket
+4. **Post-Deploy**: Lambda function invalidates CloudFront cache for immediate updates
+
+### Step 5: Notifications
+
+If configured, SNS sends email notifications for:
+- Stack deployment completion
+- Pipeline execution success
+- Pipeline execution failure
+- CloudFront cache invalidation
+
 ## Architecture
 
 ```
-GitHub Repo → CodeStar Connection → CodePipeline → CodeBuild → S3 → CloudFront (OAC)
-                                          ↓
-                                    SNS Notifications
+GitHub Repo → GitHub Connection → CodePipeline → CodeBuild → S3 → CloudFront (OAC)
+                                        ↓
+                                  SNS Notifications
+                                        ↓
+                                  Lambda (Cache Invalidation)
 ```
 
 **Security:** S3 bucket is private with CloudFront Origin Access Control (OAC) for secure access.
 
 **SPA Routing:** CloudFront error response mapping (404/403 → index.html) ensures client-side routing works correctly.
 
+## Core Components
+
+| Component | Purpose | Implementation |
+|-----------|---------|----------------|
+| ConfigLoader | Configuration parsing and validation | [src/config/loader.ts](src/config/loader.ts) |
+| SpaHostingStack | Main CDK stack orchestration | [src/stack/spa-hosting-stack.ts](src/stack/spa-hosting-stack.ts) |
+| PipelineConfigGenerator | BuildSpec generation for CodeBuild | [src/pipeline/buildspec-generator.ts](src/pipeline/buildspec-generator.ts) |
+| NotificationManager | SNS topic and subscription management | [src/notifications/notification-manager.ts](src/notifications/notification-manager.ts) |
+
+## AWS Services Integration
+
+- **Amazon S3**: Private bucket for static asset storage with server-side encryption
+- **Amazon CloudFront**: Global CDN with Origin Access Control (OAC) for secure S3 access and HTTPS enforcement
+- **AWS CodePipeline**: Three-stage CI/CD orchestration (Source → Build → Deploy)
+- **AWS CodeBuild**: Serverless build environment with Node.js 20 runtime
+- **AWS CodeConnections**: Source repository integration via OAuth (supports GitHub, Bitbucket, GitLab, GitHub Enterprise Server, GitLab self-managed, and Azure DevOps)
+- **Amazon SNS**: Email notification system for deployment events
+- **AWS Lambda**: CloudFront cache invalidation trigger on successful deployments
+- **Amazon EventBridge**: Event-driven automation for pipeline state changes
+- **AWS IAM**: Fine-grained permissions for service-to-service communication
+
+## Technical Implementation
+
+### Configuration-Driven Architecture
+
+The kit uses a declarative YAML configuration file that drives all infrastructure decisions. The `ConfigLoader` validates configuration at deployment time, preventing invalid deployments before any AWS resources are created.
+
+### Origin Access Control (OAC)
+
+Modern AWS-recommended approach for CloudFront-to-S3 security. The kit creates an OAC resource and configures S3 bucket policies to allow only CloudFront access using AWS:SourceArn conditions. This replaces the legacy Origin Access Identity (OAI) approach.
+
+### Buildspec Generation
+
+The `PipelineConfigGenerator` dynamically creates CodeBuild buildspec configurations based on your SPA's requirements. Supports custom install commands, build commands, and output directories while providing sensible defaults.
+
+### Event-Driven Notifications
+
+EventBridge rules monitor CodePipeline state changes and trigger SNS notifications. Lambda functions handle CloudFront cache invalidation and send completion notifications.
+
+### Infrastructure as Code
+
+Built with AWS CDK (TypeScript), providing type safety, IDE autocomplete, and the full power of CloudFormation. All infrastructure is version-controlled and reproducible.
+
 ## Prerequisites
 
 - **Node.js** 18+ and npm
 - **AWS CLI** configured with credentials (`aws configure`)
 - **AWS Account** with appropriate permissions
-- **GitHub Repository** containing your SPA
+- **Source Repository** containing your SPA (GitHub, Bitbucket, GitLab, GitHub Enterprise Server, GitLab self-managed, or Azure DevOps)
 
 ## Quick Start
 
@@ -86,14 +181,16 @@ This will:
 
 **Expected time**: 5-10 minutes for initial deployment
 
-### 5. Authorize GitHub Connection
+### 5. Authorize Source Repository Connection
 
-After deployment, you'll see output with a CodeStar Connection ARN. You need to authorize this connection:
+After deployment, you'll see output with a Connection ARN. You need to authorize this connection:
 
-1. Go to [AWS CodePipeline Console](https://console.aws.amazon.com/codesuite/settings/connections)
+1. Go to AWS Console → Developer Tools → Settings → Connections
 2. Find the "spa-hosting-github" connection
 3. Click "Update pending connection"
-4. Complete the GitHub OAuth authorization
+4. Complete the OAuth authorization with your source code provider
+
+**Note**: This kit is configured for GitHub by default, but AWS CodeConnections supports other providers including Bitbucket, GitLab, GitHub Enterprise Server, GitLab self-managed, and Azure DevOps. To use a different provider, modify the connection configuration in the CDK stack.
 
 ### 6. Done!
 
@@ -181,7 +278,20 @@ npm run cdk synth
 
 # View differences
 npm run cdk diff
+
+# Run tests
+npm test
+
+# Run unit tests only
+npm run test:unit
+
+# Run property-based tests only
+npm run test:property
 ```
+
+## Infrastructure
+
+For detailed information about the CDK infrastructure, deployment process, and development workflow, see [DEVELOPER.md](DEVELOPER.md).
 
 ## Troubleshooting
 
@@ -194,9 +304,10 @@ Make sure your `config.yml` has:
 
 ### Pipeline not triggering
 
-1. Check that CodeStar Connection is authorized in AWS Console
+1. Check that your source repository connection is authorized in AWS Console (Developer Tools → Settings → Connections)
 2. Verify the branch name matches your configuration
-3. Check CodePipeline execution history in AWS Console
+3. Verify the repository URL format matches your provider (GitHub, Bitbucket, GitLab, etc.)
+4. Check CodePipeline execution history in AWS Console
 
 ### Build failures
 
@@ -258,10 +369,18 @@ CDK gives you the full power of CloudFormation with type safety and composabilit
 
 This kit is infrastructure, not a framework. You own the code, you control the deployment, and you can evolve it as your needs grow.
 
+## Related Projects
+
+- [Sample SPA Repository](https://github.com/rusty428/aws-migration-sample-spa) - React + Vite + TypeScript reference implementation
+
 ## License
 
 MIT
 
-## Support
+## Contact
 
 For questions or custom configurations, contact @awsrusty
+
+---
+
+Last updated: 2026-02-10
