@@ -1,1 +1,1 @@
-export * from './spa-migration-stack';
+export * from './spa-hosting-stack';

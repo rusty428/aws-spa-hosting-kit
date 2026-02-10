@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { SpaHostingStack } from '../stack/spa-migration-stack';
+import { SpaHostingStack } from '../stack/spa-hosting-stack';
 import { ConfigLoader } from '../config';
 
 const app = new cdk.App();
