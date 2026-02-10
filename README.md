@@ -131,6 +131,8 @@ See [PREREQUISITES.md](PREREQUISITES.md) for a complete checklist of required to
 
 ## Quick Start
 
+**Using an AI-powered IDE?** See [IDEPrompt.md](IDEPrompt.md) for a copy-paste prompt to guide setup.
+
 ### 1. Clone this repository
 
 ```bash
