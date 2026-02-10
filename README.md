@@ -91,7 +91,7 @@ This will:
 After deployment, you'll see output with a CodeStar Connection ARN. You need to authorize this connection:
 
 1. Go to [AWS CodePipeline Console](https://console.aws.amazon.com/codesuite/settings/connections)
-2. Find the "spa-migration-github" connection
+2. Find the "spa-hosting-github" connection
 3. Click "Update pending connection"
 4. Complete the GitHub OAuth authorization
 
@@ -102,7 +102,7 @@ Your infrastructure is ready! Any push to the configured branch will automatical
 The CloudFront URL will be in the deployment output:
 ```
 Outputs:
-SpaMigrationStack.CloudFrontUrl = https://d1234567890.cloudfront.net
+SpaHostingStack.CloudFrontUrl = https://d1234567890.cloudfront.net
 ```
 
 ## Configuration Options

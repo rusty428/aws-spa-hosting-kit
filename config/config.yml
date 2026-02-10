@@ -11,7 +11,7 @@ aws:
 notifications:
   # Change this to your email address to receive deployment notifications
   # Or remove this line to disable notifications
-  email: "rusty@example.com"
+  email: "rustynations@gmail.com"
 
 build:
   outputDirectory: "dist"

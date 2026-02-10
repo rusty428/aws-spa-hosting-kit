@@ -504,7 +504,7 @@ Next steps:
 1. Authorize the CodeStar Connection in the AWS Console
 2. Push changes to your GitHub repository to trigger the pipeline
 
-Your SPA migration infrastructure is ready!\`
+Your SPA hosting infrastructure is ready!\`
             }));
             
             return { Status: 'SUCCESS' };

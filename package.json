@@ -26,8 +26,7 @@
     "cloudfront",
     "s3",
     "codepipeline",
-    "infrastructure",
-    "migration"
+    "infrastructure"
   ],
   "author": "Rusty Nations",
   "license": "MIT",
