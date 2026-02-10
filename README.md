@@ -12,6 +12,8 @@ The AWS SPA Migration Kit provides a complete infrastructure setup for hosting y
 - **Email Notifications**: Optional deployment status alerts
 - **One Command Deploy**: Simple setup and deployment
 
+This kit is designed for teams that want AWS-native hosting and CI/CD without adopting a new frontend framework, service control plane, or modifying their existing SPA repository.
+
 ## Architecture
 
 ```
@@ -21,6 +23,8 @@ GitHub Repo → CodeStar Connection → CodePipeline → CodeBuild → S3 → Cl
 ```
 
 **Security:** S3 bucket is private with CloudFront Origin Access Control (OAC) for secure access.
+
+**SPA Routing:** CloudFront error response mapping (404/403 → index.html) ensures client-side routing works correctly.
 
 ## Prerequisites
 
@@ -73,7 +77,7 @@ npm run deploy
 ```
 
 This will:
-- Create S3 bucket for static hosting
+- Create private S3 bucket for static assets
 - Create CloudFront distribution
 - Set up CodePipeline with GitHub integration
 - Configure email notifications (if enabled)
@@ -91,7 +95,7 @@ After deployment, you'll see output with a CodeStar Connection ARN. You need to 
 
 ### 6. Done!
 
-Your infrastructure is ready! Any push to your SPA repository's main branch will automatically trigger a redeployment.
+Your infrastructure is ready! Any push to the configured branch will automatically trigger a redeployment.
 
 The CloudFront URL will be in the deployment output:
 ```
@@ -135,6 +139,19 @@ This kit works with any SPA framework that builds to static files:
 - ✅ Angular
 - ✅ Svelte
 - ✅ Any framework that outputs HTML/CSS/JS
+
+**Constraint:** Frameworks must produce a fully static output directory (e.g., `dist/`, `build/`). Server-side rendering is out of scope.
+
+## Non-Goals
+
+This kit does not:
+
+- Modify your SPA repository or Git workflows
+- Manage backend services, authentication, or APIs
+- Replace your existing CI for non-frontend workloads
+- Provide preview environments or PR-based deployments (yet)
+
+Many teams start with this kit as a lift-and-shift hosting migration, then progressively enable custom domains, WAF, logging, or multi-environment deployments as their AWS footprint grows.
 
 ## Notifications
 
@@ -225,6 +242,19 @@ Typical monthly costs for a small SPA:
 This kit is tested with: https://github.com/rusty428/aws-migration-sample-spa
 
 A React + Vite + TypeScript SPA that demonstrates the complete workflow.
+
+## Why This Exists
+
+**Why not Amplify?**
+Amplify is a full-stack framework with its own CLI, conventions, and abstractions. This kit is for teams that want direct control over AWS primitives without framework lock-in.
+
+**Why not Netlify/Vercel?**
+Those are excellent platforms, but some teams need AWS-native infrastructure for compliance, existing AWS investments, or integration with other AWS services. This kit provides that without vendor lock-in.
+
+**Why CDK + primitives?**
+CDK gives you the full power of CloudFormation with type safety and composability. You can extend this kit with any AWS service, customize IAM policies, or integrate with existing infrastructure—all in TypeScript.
+
+This kit is infrastructure, not a framework. You own the code, you control the deployment, and you can evolve it as your needs grow.
 
 ## License
 
