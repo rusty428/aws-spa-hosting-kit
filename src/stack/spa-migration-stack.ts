@@ -14,14 +14,14 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
-import { MigrationConfig } from '../config/types';
+import { HostingConfig } from '../config/types';
 import { PipelineConfigGenerator } from '../pipeline/buildspec-generator';
 
 /**
- * SpaMigrationStack creates AWS infrastructure for SPA hosting and CI/CD
+ * SpaHostingStack creates AWS infrastructure for SPA hosting and CI/CD
  */
-export class SpaMigrationStack extends cdk.Stack {
-  private readonly config: MigrationConfig;
+export class SpaHostingStack extends cdk.Stack {
+  private readonly config: HostingConfig;
   private bucket!: s3.Bucket;
   private distribution!: cloudfront.Distribution;
   private codeStarConnection!: codeconnections.CfnConnection;
@@ -31,7 +31,7 @@ export class SpaMigrationStack extends cdk.Stack {
   private buildOutput!: codepipeline.Artifact;
   private notificationTopic?: sns.Topic;
 
-  constructor(scope: Construct, id: string, config: MigrationConfig, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, config: HostingConfig, props?: cdk.StackProps) {
     super(scope, id, props);
 
     this.config = config;
@@ -97,11 +97,11 @@ export class SpaMigrationStack extends cdk.Stack {
     // Create Origin Access Control (OAC) - modern replacement for OAI
     const originAccessControl = new cloudfront.CfnOriginAccessControl(this, 'OAC', {
       originAccessControlConfig: {
-        name: 'spa-migration-oac',
+        name: 'spa-hosting-oac',
         originAccessControlOriginType: 's3',
         signingBehavior: 'always',
         signingProtocol: 'sigv4',
-        description: 'Origin Access Control for SPA Migration Kit',
+        description: 'Origin Access Control for SPA Hosting Kit',
       },
     });
 
@@ -164,7 +164,7 @@ export class SpaMigrationStack extends cdk.Stack {
    * 
    * private createCloudFrontDistribution(bucket: s3.Bucket): cloudfront.Distribution {
    *   const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
-   *     comment: 'OAI for SPA Migration Kit',
+   *     comment: 'OAI for SPA Hosting Kit',
    *   });
    * 
    *   bucket.grantRead(originAccessIdentity);
@@ -214,7 +214,7 @@ export class SpaMigrationStack extends cdk.Stack {
     }
 
     const connection = new codeconnections.CfnConnection(this, 'GitHubConnection', {
-      connectionName: 'spa-migration-github',
+      connectionName: 'spa-hosting-github',
       providerType: 'GitHub',
     });
 
@@ -421,8 +421,8 @@ export class SpaMigrationStack extends cdk.Stack {
     }
 
     const topic = new sns.Topic(this, 'NotificationTopic', {
-      displayName: 'SPA Migration Notifications',
-      topicName: 'spa-migration-notifications',
+      displayName: 'SPA Hosting Notifications',
+      topicName: 'spa-hosting-notifications',
     });
 
     // Create email subscription
@@ -454,7 +454,7 @@ export class SpaMigrationStack extends cdk.Stack {
     });
     successRule.addTarget(new events_targets.SnsTopic(topic, {
       message: events.RuleTargetInput.fromText(
-        `✅ SPA Migration Pipeline Succeeded\n\nPipeline: ${this.pipeline.pipelineName}\nTime: ${events.EventField.time}\n\nYour SPA has been successfully deployed!`
+        `✅ SPA Hosting Pipeline Succeeded\n\nPipeline: ${this.pipeline.pipelineName}\nTime: ${events.EventField.time}\n\nYour SPA has been successfully deployed!`
       ),
     }));
 
@@ -471,7 +471,7 @@ export class SpaMigrationStack extends cdk.Stack {
     });
     failureRule.addTarget(new events_targets.SnsTopic(topic, {
       message: events.RuleTargetInput.fromText(
-        `❌ SPA Migration Pipeline Failed\n\nPipeline: ${this.pipeline.pipelineName}\nTime: ${events.EventField.time}\n\nPlease check the AWS Console for details.`
+        `❌ SPA Hosting Pipeline Failed\n\nPipeline: ${this.pipeline.pipelineName}\nTime: ${events.EventField.time}\n\nPlease check the AWS Console for details.`
       ),
     }));
   }
@@ -495,7 +495,7 @@ export class SpaMigrationStack extends cdk.Stack {
           try {
             await sns.send(new PublishCommand({
               TopicArn: topicArn,
-              Subject: '🚀 SPA Migration Stack Deployed',
+              Subject: '🚀 SPA Hosting Stack Deployed',
               Message: \`Stack deployment complete!
 
 CloudFront URL: \${cloudFrontUrl}

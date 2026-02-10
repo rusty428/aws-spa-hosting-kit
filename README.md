@@ -1,16 +1,18 @@
-# AWS SPA Migration Kit
+# AWS SPA Hosting Kit
 
-Infrastructure-as-code solution for migrating Single Page Applications to AWS with automated CI/CD pipelines.
+Infrastructure-as-code solution for hosting Single Page Applications on AWS with automated CI/CD pipelines.
 
 ## Overview
 
-The AWS SPA Migration Kit provides a complete infrastructure setup for hosting your SPA on AWS with:
+The AWS SPA Hosting Kit provides a complete infrastructure setup for hosting your SPA on AWS with:
 
 - **S3 + CloudFront**: Static hosting with global CDN delivery
 - **Automated CI/CD**: CodePipeline triggered by GitHub commits
 - **Zero SPA Changes**: Your existing SPA repository remains untouched
 - **Email Notifications**: Optional deployment status alerts
 - **One Command Deploy**: Simple setup and deployment
+
+This kit can be used both to host a new SPA from scratch and to migrate an existing SPA to AWS. The design intentionally keeps infrastructure and application code separate, allowing teams to adopt AWS-native hosting and CI/CD without modifying their existing repositories or workflows.
 
 This kit is designed for teams that want AWS-native hosting and CI/CD without adopting a new frontend framework, service control plane, or modifying their existing SPA repository.
 
@@ -38,8 +40,8 @@ GitHub Repo → CodeStar Connection → CodePipeline → CodeBuild → S3 → Cl
 ### 1. Clone this repository
 
 ```bash
-git clone https://github.com/rusty428/aws-spa-migration-kit.git
-cd aws-spa-migration-kit
+git clone https://github.com/rusty428/aws-spa-hosting-kit.git
+cd aws-spa-hosting-kit
 ```
 
 ### 2. Install dependencies
@@ -151,7 +153,7 @@ This kit does not:
 - Replace your existing CI for non-frontend workloads
 - Provide preview environments or PR-based deployments (yet)
 
-Many teams start with this kit as a lift-and-shift hosting migration, then progressively enable custom domains, WAF, logging, or multi-environment deployments as their AWS footprint grows.
+Many teams start with this kit as a lift-and-shift hosting migration, then progressively enable custom domains, WAF, logging, or multi-environment deployments as their AWS footprint grows. It's equally suitable for greenfield SPAs that need production-grade AWS hosting from day one.
 
 ## Notifications
 
@@ -241,7 +243,7 @@ Typical monthly costs for a small SPA:
 
 This kit is tested with: https://github.com/rusty428/aws-migration-sample-spa
 
-A React + Vite + TypeScript SPA that demonstrates the complete workflow.
+A React + Vite + TypeScript SPA that demonstrates the complete workflow. This sample can be used as a starting point for new SPAs or as a reference for hosting an existing SPA.
 
 ## Why This Exists
 

@@ -1,8 +1,8 @@
 /**
- * Configuration types for AWS SPA Migration Kit
+ * Configuration types for AWS SPA Hosting Kit
  */
 
-export interface MigrationConfig {
+export interface HostingConfig {
   github: GitHubConfig;
   aws: AwsConfig;
   domain?: DomainConfig;

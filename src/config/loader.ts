@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
-import { MigrationConfig, ValidationResult } from './types';
+import { HostingConfig, ValidationResult } from './types';
 
 /**
  * ConfigLoader handles loading and validating configuration files
@@ -12,7 +12,7 @@ export class ConfigLoader {
    * @returns Parsed configuration object with defaults applied
    * @throws Error if file not found or YAML parsing fails
    */
-  static load(filePath: string): MigrationConfig {
+  static load(filePath: string): HostingConfig {
     try {
       // Check if file exists
       if (!fs.existsSync(filePath)) {
@@ -23,7 +23,7 @@ export class ConfigLoader {
       const fileContents = fs.readFileSync(filePath, 'utf8');
 
       // Parse YAML
-      const config = yaml.load(fileContents) as MigrationConfig;
+      const config = yaml.load(fileContents) as HostingConfig;
 
       if (!config) {
         throw new Error(`Configuration file is empty: ${filePath}`);
@@ -44,7 +44,7 @@ export class ConfigLoader {
    * @param config Configuration object
    * @returns Configuration with defaults applied
    */
-  private static applyDefaults(config: MigrationConfig): MigrationConfig {
+  private static applyDefaults(config: HostingConfig): HostingConfig {
     // Default maintainer email for notifications
     const DEFAULT_NOTIFICATION_EMAIL = 'rusty@example.com';
 
@@ -70,7 +70,7 @@ export class ConfigLoader {
    * @param config Configuration to validate
    * @returns ValidationResult with errors and warnings
    */
-  static validate(config: MigrationConfig): ValidationResult {
+  static validate(config: HostingConfig): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 

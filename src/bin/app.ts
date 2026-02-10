@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { SpaMigrationStack } from '../stack/spa-migration-stack';
+import { SpaHostingStack } from '../stack/spa-migration-stack';
 import { ConfigLoader } from '../config';
 
 const app = new cdk.App();
@@ -27,12 +27,12 @@ try {
   }
   
   // Create stack
-  new SpaMigrationStack(app, 'SpaMigrationStack', config, {
+  new SpaHostingStack(app, 'SpaHostingStack', config, {
     env: {
       region: config.aws.region,
       account: config.aws.accountId || process.env.CDK_DEFAULT_ACCOUNT,
     },
-    description: 'AWS SPA Migration Kit - Infrastructure for hosting SPAs with automated CI/CD',
+    description: 'AWS SPA Hosting Kit - Infrastructure for hosting SPAs with automated CI/CD',
   });
   
 } catch (error) {

@@ -1,7 +1,7 @@
 {
-  "name": "aws-spa-migration-kit",
+  "name": "aws-spa-hosting-kit",
   "version": "1.0.0",
-  "description": "Infrastructure-as-code kit for migrating Single Page Applications to AWS with automated CI/CD",
+  "description": "Infrastructure-as-code kit for hosting Single Page Applications on AWS with automated CI/CD",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -16,24 +16,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rusty428/aws-spa-migration-kit.git"
+    "url": "git+https://github.com/rusty428/aws-spa-hosting-kit.git"
   },
   "keywords": [
     "aws",
     "cdk",
     "spa",
-    "migration",
+    "hosting",
     "cloudfront",
     "s3",
     "codepipeline",
-    "infrastructure"
+    "infrastructure",
+    "migration"
   ],
   "author": "Rusty Nations",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rusty428/aws-spa-migration-kit/issues"
+    "url": "https://github.com/rusty428/aws-spa-hosting-kit/issues"
   },
-  "homepage": "https://github.com/rusty428/aws-spa-migration-kit#readme",
+  "homepage": "https://github.com/rusty428/aws-spa-hosting-kit#readme",
   "dependencies": {
     "aws-cdk-lib": "^2.238.0",
     "constructs": "^10.4.5",
