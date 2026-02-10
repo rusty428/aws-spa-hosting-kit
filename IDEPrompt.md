@@ -12,10 +12,12 @@ Copy and paste this prompt into your AI-powered IDE (Cursor, GitHub Copilot, Kir
 
 ## Prompt Template
 
+Copy everything below this line:
+
 ```
 I want to set up the AWS SPA Hosting Kit to host my Single Page Application on AWS with automated CI/CD.
 
-**My Project Details:**
+My Project Details:
 - Project Name: [YOUR-PROJECT-NAME] (alphanumeric, hyphens, underscores only)
 - SPA Repository URL: [YOUR-GITHUB-URL] (e.g., https://github.com/username/repo)
 - Branch to monitor: [BRANCH-NAME] (default: main)
@@ -23,58 +25,47 @@ I want to set up the AWS SPA Hosting Kit to host my Single Page Application on A
 - Notification Email: [YOUR-EMAIL] (optional)
 - Build Output Directory: [OUTPUT-DIR] (default: dist)
 
-**Please help me:**
+Please help me:
 
-1. Clone the AWS SPA Hosting Kit repository:
-   ```bash
-   git clone https://github.com/rusty428/aws-spa-hosting-kit.git
-   cd aws-spa-hosting-kit
-   ```
+1. Clone the AWS SPA Hosting Kit repository from https://github.com/rusty428/aws-spa-hosting-kit.git
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+2. Install dependencies with npm install
 
-3. Create and configure `config/config.yml` with my project details above
+3. Create and configure config/config.yml with my project details above
 
 4. Validate my configuration is correct
 
-5. Build the TypeScript code:
-   ```bash
-   npm run build
-   ```
+5. Build the TypeScript code with npm run build
 
-6. Show me the CDK deployment command I should run:
-   ```bash
-   npm run deploy
-   ```
+6. Show me the CDK deployment command I should run: npm run deploy
 
 7. After deployment, remind me to:
    - Authorize the GitHub connection in AWS Console (Developer Tools → Settings → Connections)
    - Confirm the SNS email subscription (if notifications enabled)
    - Test the pipeline by pushing to my repository
 
-**Prerequisites I've already completed:**
-- ✅ Node.js 18+ installed
-- ✅ AWS CLI configured (`aws configure`)
-- ✅ AWS account with appropriate permissions
-- ✅ Source repository with SPA that builds to static files
+Prerequisites I've already completed:
+- Node.js 18+ installed
+- AWS CLI configured (aws configure)
+- AWS account with appropriate permissions
+- Source repository with SPA that builds to static files
 
-**Reference Documentation:**
-- Prerequisites: See `PREREQUISITES.md`
-- User Guide: See `README.md`
-- Developer Guide: See `DEVELOPER.md`
+Reference Documentation:
+- Prerequisites: See PREREQUISITES.md
+- User Guide: See README.md
+- Developer Guide: See DEVELOPER.md
 ```
 
 ---
 
 ## Example with Filled Values
 
+Copy everything below this line:
+
 ```
 I want to set up the AWS SPA Hosting Kit to host my Single Page Application on AWS with automated CI/CD.
 
-**My Project Details:**
+My Project Details:
 - Project Name: my-company-website
 - SPA Repository URL: https://github.com/mycompany/website
 - Branch to monitor: main
@@ -82,48 +73,35 @@ I want to set up the AWS SPA Hosting Kit to host my Single Page Application on A
 - Notification Email: devops@mycompany.com
 - Build Output Directory: dist
 
-**Please help me:**
+Please help me:
 
-1. Clone the AWS SPA Hosting Kit repository:
-   ```bash
-   git clone https://github.com/rusty428/aws-spa-hosting-kit.git
-   cd aws-spa-hosting-kit
-   ```
+1. Clone the AWS SPA Hosting Kit repository from https://github.com/rusty428/aws-spa-hosting-kit.git
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+2. Install dependencies with npm install
 
-3. Create and configure `config/config.yml` with my project details above
+3. Create and configure config/config.yml with my project details above
 
 4. Validate my configuration is correct
 
-5. Build the TypeScript code:
-   ```bash
-   npm run build
-   ```
+5. Build the TypeScript code with npm run build
 
-6. Show me the CDK deployment command I should run:
-   ```bash
-   npm run deploy
-   ```
+6. Show me the CDK deployment command I should run: npm run deploy
 
 7. After deployment, remind me to:
    - Authorize the GitHub connection in AWS Console (Developer Tools → Settings → Connections)
    - Confirm the SNS email subscription (if notifications enabled)
    - Test the pipeline by pushing to my repository
 
-**Prerequisites I've already completed:**
-- ✅ Node.js 18+ installed
-- ✅ AWS CLI configured (`aws configure`)
-- ✅ AWS account with appropriate permissions
-- ✅ Source repository with SPA that builds to static files
+Prerequisites I've already completed:
+- Node.js 18+ installed
+- AWS CLI configured (aws configure)
+- AWS account with appropriate permissions
+- Source repository with SPA that builds to static files
 
-**Reference Documentation:**
-- Prerequisites: See `PREREQUISITES.md`
-- User Guide: See `README.md`
-- Developer Guide: See `DEVELOPER.md`
+Reference Documentation:
+- Prerequisites: See PREREQUISITES.md
+- User Guide: See README.md
+- Developer Guide: See DEVELOPER.md
 ```
 
 ---
