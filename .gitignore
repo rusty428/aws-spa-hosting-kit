@@ -1,7 +1,7 @@
 # Temp directory (scratch drive)
 temp/
 
-# Kiro directory (IDE-specific)
+# IDE-specific directories
 .kiro/
 
 # Dependencies
