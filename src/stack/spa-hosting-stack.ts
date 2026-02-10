@@ -313,7 +313,7 @@ export class SpaHostingStack extends cdk.Stack {
    */
   private createPipeline(): codepipeline.Pipeline {
     const pipeline = new codepipeline.Pipeline(this, 'SpaPipeline', {
-      pipelineName: 'spa-migration-pipeline',
+      pipelineName: 'spa-hosting-pipeline',
       restartExecutionOnUpdate: true,
       stages: [
         this.createSourceStage(),
