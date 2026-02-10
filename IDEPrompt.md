@@ -1,10 +1,6 @@
 # IDE Prompt – AWS SPA Hosting Kit Setup
 
-Copy and paste this prompt into your AI-powered IDE (Cursor, GitHub Copilot, Kiro, etc.) to guide the setup process from an empty directory.
-
----
-
-# IDE Prompt – AWS SPA Hosting Kit Setup
+**Note**: This prompt is versioned alongside the kit. If setup behavior changes, update this file.
 
 Copy and paste this prompt into your AI-powered IDE (Cursor, GitHub Copilot, Kiro, etc.) to guide the setup process from an empty directory.
 
@@ -43,6 +39,8 @@ Please help me:
    - Authorize the GitHub connection in AWS Console (Developer Tools → Settings → Connections)
    - Confirm the SNS email subscription (if notifications enabled)
    - Test the pipeline by pushing to my repository
+
+8. If any step fails, explain why it failed and which document to consult next (README.md, PREREQUISITES.md, or DEVELOPER.md).
 
 Prerequisites I've already completed:
 - Node.js 18+ installed
@@ -91,6 +89,8 @@ Please help me:
    - Authorize the GitHub connection in AWS Console (Developer Tools → Settings → Connections)
    - Confirm the SNS email subscription (if notifications enabled)
    - Test the pipeline by pushing to my repository
+
+8. If any step fails, explain why it failed and which document to consult next (README.md, PREREQUISITES.md, or DEVELOPER.md).
 
 Prerequisites I've already completed:
 - Node.js 18+ installed

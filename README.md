@@ -131,7 +131,7 @@ See [PREREQUISITES.md](PREREQUISITES.md) for a complete checklist of required to
 
 ## Quick Start
 
-**Using an AI-powered IDE?** Copy the prompt from [IDEPrompt.md](IDEPrompt.md) and paste it into your AI assistant (Cursor, GitHub Copilot Chat, Kiro, etc.) to get guided setup assistance.
+Prefer guided setup? Use the AI-assisted setup prompt in [IDEPrompt.md](IDEPrompt.md).
 
 ### 1. Clone this repository
 
@@ -397,7 +397,7 @@ The AI will help you:
 - Build and deploy the infrastructure
 - Understand post-deployment steps
 
-This is especially helpful if you prefer conversational guidance over following written instructions.
+**Note**: The AI follows this repository's documentation and does not replace reviewing README.md and PREREQUISITES.md.
 
 ## License
 
