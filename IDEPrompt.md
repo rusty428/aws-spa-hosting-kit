@@ -4,17 +4,24 @@ Copy and paste this prompt into your AI-powered IDE (Cursor, GitHub Copilot, Kir
 
 ---
 
-## Prompt
+# IDE Prompt – AWS SPA Hosting Kit Setup
 
+Copy and paste this prompt into your AI-powered IDE (Cursor, GitHub Copilot, Kiro, etc.) to guide the setup process from an empty directory.
+
+---
+
+## Prompt Template
+
+```
 I want to set up the AWS SPA Hosting Kit to host my Single Page Application on AWS with automated CI/CD.
 
 **My Project Details:**
-- Project Name: `[YOUR-PROJECT-NAME]` (alphanumeric, hyphens, underscores only)
-- SPA Repository URL: `[YOUR-GITHUB-URL]` (e.g., https://github.com/username/repo)
-- Branch to monitor: `[BRANCH-NAME]` (default: main)
-- AWS Region: `[AWS-REGION]` (e.g., us-east-1)
-- Notification Email: `[YOUR-EMAIL]` (optional)
-- Build Output Directory: `[OUTPUT-DIR]` (default: dist)
+- Project Name: [YOUR-PROJECT-NAME] (alphanumeric, hyphens, underscores only)
+- SPA Repository URL: [YOUR-GITHUB-URL] (e.g., https://github.com/username/repo)
+- Branch to monitor: [BRANCH-NAME] (default: main)
+- AWS Region: [AWS-REGION] (e.g., us-east-1)
+- Notification Email: [YOUR-EMAIL] (optional)
+- Build Output Directory: [OUTPUT-DIR] (default: dist)
 
 **Please help me:**
 
@@ -58,24 +65,22 @@ I want to set up the AWS SPA Hosting Kit to host my Single Page Application on A
 - Prerequisites: See `PREREQUISITES.md`
 - User Guide: See `README.md`
 - Developer Guide: See `DEVELOPER.md`
+```
 
 ---
 
-## Example Filled Prompt
+## Example with Filled Values
 
-Here's an example with actual values:
-
----
-
+```
 I want to set up the AWS SPA Hosting Kit to host my Single Page Application on AWS with automated CI/CD.
 
 **My Project Details:**
-- Project Name: `my-company-website`
-- SPA Repository URL: `https://github.com/mycompany/website`
-- Branch to monitor: `main`
-- AWS Region: `us-east-1`
-- Notification Email: `devops@mycompany.com`
-- Build Output Directory: `dist`
+- Project Name: my-company-website
+- SPA Repository URL: https://github.com/mycompany/website
+- Branch to monitor: main
+- AWS Region: us-east-1
+- Notification Email: devops@mycompany.com
+- Build Output Directory: dist
 
 **Please help me:**
 
@@ -119,6 +124,7 @@ I want to set up the AWS SPA Hosting Kit to host my Single Page Application on A
 - Prerequisites: See `PREREQUISITES.md`
 - User Guide: See `README.md`
 - Developer Guide: See `DEVELOPER.md`
+```
 
 ---
 
