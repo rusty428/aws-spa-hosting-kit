@@ -17,12 +17,7 @@ This guide provides detailed information for developers working on the AWS SPA H
 
 ### Prerequisites
 
-- **Node.js**: Version 18 or higher
-- **npm**: Comes with Node.js
-- **AWS CLI**: Version 2.x configured with credentials
-- **AWS Account**: With appropriate IAM permissions
-- **TypeScript**: Installed globally or via project dependencies
-- **Git**: For version control
+Before starting development, ensure you have all required tools and permissions. See [PREREQUISITES.md](PREREQUISITES.md) for the complete checklist.
 
 ### Initial Setup
 
