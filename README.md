@@ -131,7 +131,7 @@ See [PREREQUISITES.md](PREREQUISITES.md) for a complete checklist of required to
 
 ## Quick Start
 
-**Using an AI-powered IDE?** See [IDEPrompt.md](IDEPrompt.md) for a copy-paste prompt to guide setup.
+**Using an AI-powered IDE?** Copy the prompt from [IDEPrompt.md](IDEPrompt.md) and paste it into your AI assistant (Cursor, GitHub Copilot Chat, Kiro, etc.) to get guided setup assistance.
 
 ### 1. Clone this repository
 
@@ -379,6 +379,25 @@ This kit is infrastructure, not a framework. You own the code, you control the d
 ## Related Projects
 
 - [Sample SPA Repository](https://github.com/rusty428/aws-migration-sample-spa) - React + Vite + TypeScript reference implementation
+
+## AI-Assisted Setup
+
+This kit includes an AI prompt template for guided setup. If you're using an AI-powered IDE or coding assistant:
+
+1. Open [IDEPrompt.md](IDEPrompt.md)
+2. Copy the prompt template
+3. Fill in your project details (project name, repository URL, etc.)
+4. Paste into your AI assistant (Cursor, GitHub Copilot Chat, Kiro, Windsurf, etc.)
+5. Follow the AI's guidance through setup and deployment
+
+The AI will help you:
+- Clone and configure the repository
+- Create a valid `config.yml` file
+- Validate your configuration
+- Build and deploy the infrastructure
+- Understand post-deployment steps
+
+This is especially helpful if you prefer conversational guidance over following written instructions.
 
 ## License
 
