@@ -1,0 +1,233 @@
+# AWS SPA Migration Kit
+
+Infrastructure-as-code solution for migrating Single Page Applications to AWS with automated CI/CD pipelines.
+
+## Overview
+
+The AWS SPA Migration Kit provides a complete infrastructure setup for hosting your SPA on AWS with:
+
+- **S3 + CloudFront**: Static hosting with global CDN delivery
+- **Automated CI/CD**: CodePipeline triggered by GitHub commits
+- **Zero SPA Changes**: Your existing SPA repository remains untouched
+- **Email Notifications**: Optional deployment status alerts
+- **One Command Deploy**: Simple setup and deployment
+
+## Architecture
+
+```
+GitHub Repo → CodeStar Connection → CodePipeline → CodeBuild → S3 → CloudFront
+                                          ↓
+                                    SNS Notifications
+```
+
+## Prerequisites
+
+- **Node.js** 18+ and npm
+- **AWS CLI** configured with credentials (`aws configure`)
+- **AWS Account** with appropriate permissions
+- **GitHub Repository** containing your SPA
+
+## Quick Start
+
+### 1. Clone this repository
+
+```bash
+git clone https://github.com/rusty428/aws-spa-migration-kit.git
+cd aws-spa-migration-kit
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure your SPA
+
+Copy the example configuration and edit it:
+
+```bash
+cp config/config.example.yml config/config.yml
+```
+
+Edit `config/config.yml` with your settings:
+
+```yaml
+github:
+  repositoryUrl: "https://github.com/your-username/your-spa-repo"
+  branch: "main"
+
+aws:
+  region: "us-east-1"
+
+notifications:
+  email: "your-email@example.com"
+```
+
+### 4. Deploy the infrastructure
+
+```bash
+npm run deploy
+```
+
+This will:
+- Create S3 bucket for static hosting
+- Create CloudFront distribution
+- Set up CodePipeline with GitHub integration
+- Configure email notifications (if enabled)
+
+**Expected time**: 5-10 minutes for initial deployment
+
+### 5. Authorize GitHub Connection
+
+After deployment, you'll see output with a CodeStar Connection ARN. You need to authorize this connection:
+
+1. Go to [AWS CodePipeline Console](https://console.aws.amazon.com/codesuite/settings/connections)
+2. Find the "spa-migration-github" connection
+3. Click "Update pending connection"
+4. Complete the GitHub OAuth authorization
+
+### 6. Done!
+
+Your infrastructure is ready! Any push to your SPA repository's main branch will automatically trigger a redeployment.
+
+The CloudFront URL will be in the deployment output:
+```
+Outputs:
+SpaMigrationStack.CloudFrontUrl = https://d1234567890.cloudfront.net
+```
+
+## Configuration Options
+
+### Required Fields
+
+```yaml
+github:
+  repositoryUrl: "https://github.com/owner/repo"  # Your SPA repository
+  
+aws:
+  region: "us-east-1"  # AWS region for deployment
+```
+
+### Optional Fields
+
+```yaml
+github:
+  branch: "main"  # Branch to monitor (default: "main")
+
+notifications:
+  email: "you@example.com"  # Deployment notifications
+
+build:
+  outputDirectory: "dist"  # Build output folder (default: "dist")
+  buildCommand: "npm run build"  # Build command (default: "npm run build")
+  installCommand: "npm ci"  # Install command (default: "npm ci")
+```
+
+## Supported SPA Frameworks
+
+This kit works with any SPA framework that builds to static files:
+
+- ✅ React (Create React App, Vite, Next.js static export)
+- ✅ Vue (Vue CLI, Vite)
+- ✅ Angular
+- ✅ Svelte
+- ✅ Any framework that outputs HTML/CSS/JS
+
+## Notifications
+
+When notifications are enabled, you'll receive emails for:
+
+- ✅ Stack deployment complete
+- ✅ Pipeline execution succeeded
+- ❌ Pipeline execution failed
+- 🔄 CloudFront cache invalidated
+
+## Commands
+
+```bash
+# Build TypeScript
+npm run build
+
+# Deploy infrastructure
+npm run deploy
+
+# Destroy infrastructure
+npm run destroy
+
+# Synthesize CloudFormation template
+npm run cdk synth
+
+# View differences
+npm run cdk diff
+```
+
+## Troubleshooting
+
+### Configuration validation failed
+
+Make sure your `config.yml` has:
+- Valid GitHub repository URL (format: `https://github.com/owner/repo`)
+- Valid AWS region
+- Valid email format (if notifications enabled)
+
+### Pipeline not triggering
+
+1. Check that CodeStar Connection is authorized in AWS Console
+2. Verify the branch name matches your configuration
+3. Check CodePipeline execution history in AWS Console
+
+### Build failures
+
+Check CodeBuild logs in AWS Console:
+1. Go to CodePipeline
+2. Click on your pipeline execution
+3. Click "Details" on the Build stage
+4. View logs for error messages
+
+Common issues:
+- Incorrect build command
+- Wrong output directory
+- Missing dependencies in package.json
+
+## AWS Region Notes
+
+- Most features work in any AWS region
+- **ACM certificates for CloudFront** require `us-east-1`
+- If using custom domains, consider deploying to `us-east-1`
+
+## Advanced Features (Commented Scaffolding)
+
+The kit includes commented examples for:
+
+- API Gateway integration
+- Route 53 DNS configuration
+- ACM certificate management
+- Multi-environment setups (dev/staging/prod)
+
+See `config/config.example.yml` for details.
+
+## Cost Estimate
+
+Typical monthly costs for a small SPA:
+
+- **S3**: $0.023/GB storage + $0.09/GB transfer
+- **CloudFront**: $0.085/GB (first 10TB)
+- **CodePipeline**: $1/active pipeline
+- **CodeBuild**: $0.005/build minute
+
+**Estimated**: $5-20/month for most SPAs
+
+## Sample SPA
+
+This kit is tested with: https://github.com/rusty428/aws-migration-sample-spa
+
+A React + Vite + TypeScript SPA that demonstrates the complete workflow.
+
+## License
+
+MIT
+
+## Support
+
+For questions or custom configurations, contact @awsrusty

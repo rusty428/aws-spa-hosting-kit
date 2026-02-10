@@ -1,0 +1,81 @@
+# AWS SPA Migration Kit Configuration
+# Copy this file to config.yml and customize for your SPA
+
+# ============================================================================
+# REQUIRED: GitHub Repository Configuration
+# ============================================================================
+github:
+  # Full GitHub repository URL for your SPA
+  repositoryUrl: "https://github.com/your-username/your-spa-repo"
+  
+  # Branch to monitor for changes (optional, defaults to "main")
+  branch: "main"
+
+# ============================================================================
+# REQUIRED: AWS Configuration
+# ============================================================================
+aws:
+  # AWS region for deployment
+  # Note: Some features (like ACM certificates for CloudFront) require us-east-1
+  region: "us-east-1"
+  
+  # AWS account ID (optional, will be inferred if not provided)
+  # accountId: "123456789012"
+
+# ============================================================================
+# OPTIONAL: Custom Domain Configuration
+# ============================================================================
+# Uncomment to use a custom domain with your CloudFront distribution
+# domain:
+#   customDomain: "www.example.com"
+#   # ACM certificate ARN (must be in us-east-1 for CloudFront)
+#   certificateArn: "arn:aws:acm:us-east-1:123456789012:certificate/abc123"
+
+# ============================================================================
+# OPTIONAL: Notification Configuration
+# ============================================================================
+notifications:
+  # Email address for deployment notifications
+  # Receives alerts for: stack deployment, pipeline success/failure, cache invalidation
+  # Remove this line or set to empty string to disable notifications
+  email: "your-email@example.com"
+
+# ============================================================================
+# OPTIONAL: Build Configuration
+# ============================================================================
+# Customize build commands and output directory for your SPA framework
+# build:
+#   # Directory where build artifacts are output (default: "dist")
+#   outputDirectory: "dist"
+#   
+#   # Command to build your SPA (default: "npm run build")
+#   buildCommand: "npm run build"
+#   
+#   # Command to install dependencies (default: "npm ci")
+#   installCommand: "npm ci"
+
+# ============================================================================
+# FUTURE: Multi-Environment Configuration (Scaffolding Only)
+# ============================================================================
+# This is commented scaffolding for future multi-environment support
+# environments:
+#   dev:
+#     aws:
+#       region: "us-east-1"
+#     notifications:
+#       email: "dev-team@example.com"
+#   
+#   staging:
+#     aws:
+#       region: "us-west-2"
+#     notifications:
+#       email: "staging-team@example.com"
+#   
+#   prod:
+#     aws:
+#       region: "us-east-1"
+#     domain:
+#       customDomain: "www.example.com"
+#       certificateArn: "arn:aws:acm:us-east-1:123456789012:certificate/abc123"
+#     notifications:
+#       email: "prod-team@example.com"

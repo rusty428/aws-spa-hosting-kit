@@ -1,0 +1,19 @@
+# AWS SPA Migration Kit Configuration
+# Configured for the sample SPA: https://github.com/rusty428/aws-migration-sample-spa
+
+github:
+  repositoryUrl: "https://github.com/rusty428/aws-migration-sample-spa"
+  branch: "main"
+
+aws:
+  region: "us-east-1"
+
+notifications:
+  # Change this to your email address to receive deployment notifications
+  # Or remove this line to disable notifications
+  email: "rusty@example.com"
+
+build:
+  outputDirectory: "dist"
+  buildCommand: "npm run build"
+  installCommand: "npm ci"
