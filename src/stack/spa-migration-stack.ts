@@ -70,21 +70,20 @@ export class SpaMigrationStack extends cdk.Stack {
 
   /**
    * Create S3 bucket for static website hosting
+   * Bucket is private - only accessible through CloudFront
    */
   private createS3Bucket(): s3.Bucket {
     const bucket = new s3.Bucket(this, 'SpaBucket', {
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'index.html', // SPA routing
-      publicReadAccess: true,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
+      encryption: s3.BucketEncryption.S3_MANAGED,
     });
 
     // Output bucket name
     new cdk.CfnOutput(this, 'S3BucketName', {
       value: bucket.bucketName,
-      description: 'S3 bucket name for static files'
+      description: 'S3 bucket name for static files (private, accessed via CloudFront)'
     });
 
     return bucket;
@@ -92,11 +91,22 @@ export class SpaMigrationStack extends cdk.Stack {
 
   /**
    * Create CloudFront distribution for CDN delivery
+   * Uses Origin Access Control for secure S3 access
    */
   private createCloudFrontDistribution(bucket: s3.Bucket): cloudfront.Distribution {
+    // Create Origin Access Identity for CloudFront to access S3
+    const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
+      comment: 'OAI for SPA Migration Kit',
+    });
+
+    // Grant CloudFront read access to the bucket
+    bucket.grantRead(originAccessIdentity);
+
     const distribution = new cloudfront.Distribution(this, 'SpaDistribution', {
       defaultBehavior: {
-        origin: new origins.S3Origin(bucket),
+        origin: origins.S3BucketOrigin.withOriginAccessIdentity(bucket, {
+          originAccessIdentity,
+        }),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         compress: true,
       },
