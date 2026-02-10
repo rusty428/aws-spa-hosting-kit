@@ -1,6 +1,9 @@
 # Temp directory (scratch drive)
 temp/
 
+# Kiro directory (IDE-specific)
+.kiro/
+
 # Dependencies
 node_modules/
 
