@@ -468,7 +468,7 @@ Typical monthly costs for a small SPA:
 
 ## Sample SPA
 
-This kit is tested with: https://github.com/rusty428/aws-migration-sample-spa
+This kit is tested with: https://github.com/rusty428/aws-spa-react-example
 
 A React + Vite + TypeScript SPA that demonstrates the complete workflow. This sample can be used as a starting point for new SPAs or as a reference for hosting an existing SPA.
 
@@ -487,7 +487,7 @@ This kit is infrastructure, not a framework. You own the code, you control the d
 
 ## Related Projects
 
-- [Sample SPA Repository](https://github.com/rusty428/aws-migration-sample-spa) - React + Vite + TypeScript reference implementation
+- [Sample SPA Repository](https://github.com/rusty428/aws-spa-react-example) - React + Vite + TypeScript reference implementation
 
 ## AI-Assisted Setup
 

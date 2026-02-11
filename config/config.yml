@@ -1,11 +1,11 @@
 # AWS SPA Hosting Kit Configuration
-# Configured for the sample SPA: https://github.com/rusty428/aws-migration-sample-spa
+# Configured for the sample SPA: https://github.com/rusty428/aws-spa-react-example
 
 # Project name - used for pipeline and resource naming
 projectName: "aws-migration-sample"
 
 github:
-  repositoryUrl: "https://github.com/rusty428/aws-migration-sample-spa"
+  repositoryUrl: "https://github.com/rusty428/aws-spa-react-example"
   branch: "main"
 
 aws:
