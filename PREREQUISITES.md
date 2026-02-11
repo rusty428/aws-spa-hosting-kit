@@ -4,11 +4,11 @@ You must have **all** of the following before deploying this kit.
 
 ## Local Environment
 
-- **Node.js** 18 or newer (for local development)
+- **Node.js** 20 or newer (LTS recommended)
 - **npm** (comes with Node.js)
 - **Git** for version control
 
-**Note**: The AWS CodeBuild pipeline uses Node.js 20. Your local environment can use Node.js 18+ for development and testing.
+**Note**: AWS CDK v2 currently recommends Node.js 20+ for CDK development. The AWS CodeBuild pipeline also uses Node.js 20.
 
 ## AWS
 
@@ -58,7 +58,7 @@ Your Single Page Application must:
 Before proceeding, verify you can run these commands successfully:
 
 ```bash
-# Check Node.js version (should be 18+)
+# Check Node.js version (should be 20+)
 node --version
 
 # Check npm is available

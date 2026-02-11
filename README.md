@@ -366,17 +366,16 @@ npx cdk synth --profile YOUR-PROFILE-NAME
 
 **Problem**: Email notifications are not being delivered
 
-**Cause**: AWS SNS is in sandbox mode by default, which only allows sending to verified email addresses.
-
 **Solution**:
 
 1. **Check your spam/junk folder** for an SNS subscription confirmation email from AWS
-2. Click the confirmation link in the email
-3. If still not receiving emails, request production access for SNS:
-   - Go to AWS Console → SNS → Text messaging (SMS)
-   - Click "Request production access"
-   - Fill out the form explaining your use case
-   - Approval typically takes 24 hours
+2. Click the confirmation link in the email to confirm your subscription
+3. If you don't see the confirmation email:
+   - Check that the email address in `config.yml` is correct
+   - Request a new confirmation email from AWS Console → SNS → Subscriptions
+   - Look for emails from `no-reply@sns.amazonaws.com`
+
+**Note**: Email subscriptions require confirmation before notifications are delivered. This is a security feature to prevent spam.
 
 **Alternative**: Remove the `email` field from `config.yml` to disable notifications entirely.
 

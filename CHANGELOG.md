@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automatic pipeline trigger after stack deployment (only if connection is authorized)
 - Direct URL output to AWS Console connections page
 - Stack name derived from projectName for multi-stack deployments
-- SNS sandbox mode warnings and spam folder reminder
+- Email subscription confirmation reminder and spam folder warning
 
 ### Changed
 - Improved user experience with clear step-by-step guidance
