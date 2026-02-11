@@ -4,9 +4,11 @@ You must have **all** of the following before deploying this kit.
 
 ## Local Environment
 
-- **Node.js** 18 or newer
+- **Node.js** 18 or newer (for local development)
 - **npm** (comes with Node.js)
 - **Git** for version control
+
+**Note**: The AWS CodeBuild pipeline uses Node.js 20. Your local environment can use Node.js 18+ for development and testing.
 
 ## AWS
 
