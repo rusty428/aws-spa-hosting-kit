@@ -308,6 +308,8 @@ npm run destroy
 
 1. **Authorize Source Repository Connection**:
    - Go to AWS Console → Developer Tools → Settings → Connections
+   - Direct link: `https://console.aws.amazon.com/codesuite/settings/connections?region=YOUR-REGION`
+   - Replace `YOUR-REGION` with your deployment region
    - Find your connection (named `{projectName}-github`)
    - Click "Update pending connection"
    - Complete OAuth flow with your source code provider (GitHub, Bitbucket, GitLab, etc.)

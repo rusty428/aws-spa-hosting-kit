@@ -205,7 +205,11 @@ This will:
 
 After deployment, you'll see output with a Connection ARN. You need to authorize this connection:
 
+**Note**: CDK deployment completes successfully even with an unauthorized connection. The pipeline won't work until you complete this authorization step, but there's no time pressure - you can do it immediately or later.
+
 1. Go to AWS Console → Developer Tools → Settings → Connections
+   - Direct link: `https://console.aws.amazon.com/codesuite/settings/connections?region=YOUR-REGION`
+   - Replace `YOUR-REGION` with your deployment region (e.g., `us-east-1`)
 2. Find the connection (named after your `projectName`, e.g., "my-spa-project-github")
 3. Click "Update pending connection"
 4. Complete the OAuth authorization with your source code provider
@@ -329,6 +333,7 @@ Make sure your `config.yml` has:
 ### Pipeline not triggering
 
 1. Check that your source repository connection is authorized in AWS Console (Developer Tools → Settings → Connections)
+   - Direct link: `https://console.aws.amazon.com/codesuite/settings/connections?region=YOUR-REGION`
 2. Verify the branch name matches your configuration
 3. Verify the repository URL format matches your provider (GitHub, Bitbucket, GitLab, etc.)
 4. Check CodePipeline execution history in AWS Console
