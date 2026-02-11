@@ -233,6 +233,27 @@ export class SpaHostingStack extends cdk.Stack {
       description: '⚠️  IMPORTANT: Authorize the connection at this URL before the pipeline can run'
     });
 
+    // Output next steps
+    new cdk.CfnOutput(this, 'NextSteps', {
+      value: [
+        '\n',
+        '═══════════════════════════════════════════════════════════════',
+        '  NEXT STEPS TO COMPLETE SETUP',
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        '1. Authorize the GitHub connection:',
+        `   https://console.aws.amazon.com/codesuite/settings/connections?region=${this.region}`,
+        `   Find: ${this.config.projectName}-github`,
+        '   Click "Update pending connection" and authorize',
+        '',
+        '2. Trigger the pipeline to deploy your SPA:',
+        `   aws codepipeline start-pipeline-execution --name ${this.config.projectName}-hosting-pipeline`,
+        '',
+        '═══════════════════════════════════════════════════════════════',
+      ].join('\n'),
+      description: 'Post-deployment instructions'
+    });
+
     return connection;
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "aws-spa-hosting-kit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Infrastructure-as-code kit for hosting Single Page Applications on AWS with automated CI/CD",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
