@@ -362,6 +362,24 @@ npx cdk synth --profile YOUR-PROFILE-NAME
 
 **Note**: The `--` before `--profile` is required to pass arguments through npm to the CDK command.
 
+### SNS email notifications not received
+
+**Problem**: Email notifications are not being delivered
+
+**Cause**: AWS SNS is in sandbox mode by default, which only allows sending to verified email addresses.
+
+**Solution**:
+
+1. **Check your spam/junk folder** for an SNS subscription confirmation email from AWS
+2. Click the confirmation link in the email
+3. If still not receiving emails, request production access for SNS:
+   - Go to AWS Console → SNS → Text messaging (SMS)
+   - Click "Request production access"
+   - Fill out the form explaining your use case
+   - Approval typically takes 24 hours
+
+**Alternative**: Remove the `email` field from `config.yml` to disable notifications entirely.
+
 ### Configuration validation failed
 
 Make sure your `config.yml` has:
@@ -517,6 +535,33 @@ See [PREREQUISITES.md](PREREQUISITES.md) for detailed permission requirements.
 ## Safe Teardown
 
 All resources created by this kit are namespaced under your `projectName`. Running `npm run destroy` removes only resources created for that specific project, making it safe to use in shared AWS accounts. Other projects and resources remain untouched.
+
+### Cleanup Instructions
+
+To completely remove all infrastructure:
+
+```bash
+npm run destroy
+```
+
+Or with a specific AWS profile:
+
+```bash
+npm run destroy -- --profile YOUR-PROFILE-NAME
+```
+
+This will delete:
+- S3 bucket (and all contents)
+- CloudFront distribution
+- CodePipeline
+- CodeBuild project
+- CodeConnections connection
+- SNS topic and subscriptions
+- Lambda functions
+- EventBridge rules
+- IAM roles and policies
+
+The deletion process takes 15-20 minutes due to CloudFront distribution removal.
 
 ## Known Limitations
 

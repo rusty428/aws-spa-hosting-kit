@@ -46,6 +46,12 @@ aws:
 notifications:
   # Email address for deployment notifications
   # Receives alerts for: stack deployment, pipeline success/failure, cache invalidation
+  # 
+  # IMPORTANT: AWS SNS is in sandbox mode by default
+  # - You MUST confirm the subscription email sent by SNS (check spam folder!)
+  # - For production use, request SNS production access in AWS Console
+  # - See README troubleshooting section for details
+  # 
   # Remove this line or set to empty string to disable notifications
   email: "your-email@example.com"
 

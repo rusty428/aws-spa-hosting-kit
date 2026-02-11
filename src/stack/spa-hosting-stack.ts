@@ -250,6 +250,15 @@ export class SpaHostingStack extends cdk.Stack {
         `   aws codepipeline start-pipeline-execution --name ${this.config.projectName}-hosting-pipeline`,
         '',
         '═══════════════════════════════════════════════════════════════',
+        '  TO DELETE THIS STACK',
+        '═══════════════════════════════════════════════════════════════',
+        '',
+        `   npm run destroy`,
+        '',
+        '   This will remove all resources including S3 buckets, CloudFront',
+        '   distribution, pipeline, and connections. All data will be deleted.',
+        '',
+        '═══════════════════════════════════════════════════════════════',
       ].join('\n'),
       description: 'Post-deployment instructions'
     });

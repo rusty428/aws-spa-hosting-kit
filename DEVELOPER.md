@@ -303,6 +303,31 @@ npm run deploy -- --require-approval never
 npm run destroy
 ```
 
+### Stack Cleanup
+
+To completely remove all infrastructure for a project:
+
+```bash
+npm run destroy
+```
+
+Or with a specific AWS profile:
+
+```bash
+npm run destroy -- --profile YOUR-PROFILE-NAME
+```
+
+**What gets deleted:**
+- All AWS resources created by the stack (S3, CloudFront, CodePipeline, etc.)
+- All data in the S3 bucket (autoDeleteObjects is enabled)
+- IAM roles and policies
+- SNS topics and subscriptions
+- Lambda functions and EventBridge rules
+
+**Deletion time:** 15-20 minutes (CloudFront distribution removal is slow)
+
+**Safety:** Resources are namespaced by `projectName`, so destroying one stack won't affect other deployments in the same account.
+
 ### Deployment Confirmation
 
 When you run `npm run deploy`, CDK will display:

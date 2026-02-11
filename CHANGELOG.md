@@ -5,6 +5,26 @@ All notable changes to the AWS SPA Hosting Kit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-02-11
+
+### Added
+- MIT License file
+- Comprehensive cleanup/teardown documentation in CLI output, README, and DEVELOPER.md
+- Post-deployment instructions with formatted next steps in CLI output
+- Automatic pipeline trigger after stack deployment (only if connection is authorized)
+- Direct URL output to AWS Console connections page
+- Stack name derived from projectName for multi-stack deployments
+- SNS sandbox mode warnings and spam folder reminder
+
+### Changed
+- Improved user experience with clear step-by-step guidance
+- Enhanced troubleshooting documentation for common issues
+
+### Fixed
+- Stack name collision when deploying multiple instances
+- Documentation consistency for CDK commands (now uses `npx cdk`)
+- Set 43 recommended CDK feature flags to eliminate synthesis warnings
+
 ## [1.0.3] - 2026-02-11
 
 ### Added
