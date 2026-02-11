@@ -5,6 +5,26 @@ All notable changes to the AWS SPA Hosting Kit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-02-11
+
+### Added
+- Automatic pipeline trigger after stack deployment (only if connection is authorized)
+- Direct URL output to AWS Console connections page for easy authorization
+- Stack name now derived from projectName for multi-stack deployments
+
+### Fixed
+- Stack name collision when deploying multiple instances (now uses `{projectName}-HostingStack`)
+
+## [1.0.1] - 2026-02-11
+
+### Fixed
+- Updated all documentation to use `npx cdk` commands for consistency with package.json scripts
+- Set 43 recommended CDK feature flags in cdk.json to eliminate synthesis warnings
+- Clarified that CDK deployment completes successfully with connection in PENDING state
+
+### Changed
+- Documentation now consistently uses `npx cdk synth` instead of `npm run cdk synth`
+
 ## [1.0.0] - 2026-02-10
 
 ### Added

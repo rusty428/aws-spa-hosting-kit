@@ -66,6 +66,9 @@ export class SpaHostingStack extends cdk.Stack {
 
     // Setup CloudFront invalidation after deployment
     this.setupCloudFrontInvalidation();
+
+    // Trigger initial pipeline execution after stack deployment (if connection is authorized)
+    this.triggerInitialPipelineExecution();
   }
 
   /**
@@ -222,6 +225,12 @@ export class SpaHostingStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'CodeStarConnectionArn', {
       value: connection.attrConnectionArn,
       description: 'CodeStar Connection ARN (requires authorization in AWS Console)'
+    });
+
+    // Output authorization URL
+    new cdk.CfnOutput(this, 'AuthorizeConnectionUrl', {
+      value: `https://console.aws.amazon.com/codesuite/settings/connections?region=${this.region}`,
+      description: '⚠️  IMPORTANT: Authorize the connection at this URL before the pipeline can run'
     });
 
     return connection;
@@ -537,6 +546,87 @@ Your SPA hosting infrastructure is ready!\`
         new iam.PolicyStatement({
           actions: ['lambda:InvokeFunction'],
           resources: [notificationFunction.functionArn],
+        }),
+      ]),
+    });
+  }
+
+  /**
+   * Trigger initial pipeline execution after stack deployment
+   * Only triggers if the CodeConnections connection is in AVAILABLE status
+   */
+  private triggerInitialPipelineExecution(): void {
+    const triggerFunction = new lambda.Function(this, 'PipelineTriggerFunction', {
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'index.handler',
+      timeout: cdk.Duration.seconds(30),
+      code: lambda.Code.fromInline(`
+        const { CodePipelineClient, StartPipelineExecutionCommand } = require('@aws-sdk/client-codepipeline');
+        const { CodeConnectionsClient, GetConnectionCommand } = require('@aws-sdk/client-codeconnections');
+        
+        exports.handler = async (event) => {
+          const pipelineName = process.env.PIPELINE_NAME;
+          const connectionArn = process.env.CONNECTION_ARN;
+          
+          try {
+            // Check if connection is authorized
+            const connectionsClient = new CodeConnectionsClient({});
+            const connectionResponse = await connectionsClient.send(new GetConnectionCommand({
+              ConnectionArn: connectionArn
+            }));
+            
+            if (connectionResponse.Connection.ConnectionStatus !== 'AVAILABLE') {
+              console.log('Connection not yet authorized. Pipeline will not be triggered automatically.');
+              console.log('Authorize the connection in AWS Console, then manually trigger the pipeline.');
+              return { Status: 'SUCCESS', Message: 'Connection not authorized' };
+            }
+            
+            // Connection is authorized, trigger pipeline
+            const pipelineClient = new CodePipelineClient({});
+            await pipelineClient.send(new StartPipelineExecutionCommand({
+              name: pipelineName
+            }));
+            
+            console.log('Pipeline execution started successfully');
+            return { Status: 'SUCCESS', Message: 'Pipeline triggered' };
+          } catch (error) {
+            console.error('Error:', error);
+            // Don't fail the stack if pipeline trigger fails
+            return { Status: 'SUCCESS', Message: 'Error: ' + error.message };
+          }
+        };
+      `),
+      environment: {
+        PIPELINE_NAME: this.pipeline.pipelineName,
+        CONNECTION_ARN: this.codeStarConnection.attrConnectionArn,
+      },
+    });
+
+    // Grant permissions
+    triggerFunction.addToRolePolicy(new iam.PolicyStatement({
+      actions: ['codepipeline:StartPipelineExecution'],
+      resources: [this.pipeline.pipelineArn],
+    }));
+    triggerFunction.addToRolePolicy(new iam.PolicyStatement({
+      actions: ['codeconnections:GetConnection'],
+      resources: [this.codeStarConnection.attrConnectionArn],
+    }));
+
+    // Create custom resource to trigger pipeline on stack deployment
+    new cr.AwsCustomResource(this, 'InitialPipelineExecution', {
+      onCreate: {
+        service: 'Lambda',
+        action: 'invoke',
+        parameters: {
+          FunctionName: triggerFunction.functionName,
+          InvocationType: 'RequestResponse',
+        },
+        physicalResourceId: cr.PhysicalResourceId.of('InitialPipelineExecution'),
+      },
+      policy: cr.AwsCustomResourcePolicy.fromStatements([
+        new iam.PolicyStatement({
+          actions: ['lambda:InvokeFunction'],
+          resources: [triggerFunction.functionArn],
         }),
       ]),
     });

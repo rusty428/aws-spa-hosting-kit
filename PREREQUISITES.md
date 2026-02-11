@@ -70,7 +70,9 @@ aws sts get-caller-identity
 git --version
 ```
 
-If all commands succeed, you're ready to proceed with the [Quick Start](README.md#quick-start).
+**Note**: You do NOT need a global CDK CLI installation. The project includes CDK as a dependency and uses `npx cdk` to run the correct version.
+
+If all commands succeed (except CDK, which is optional), you're ready to proceed with the [Quick Start](README.md#quick-start).
 
 ---
 

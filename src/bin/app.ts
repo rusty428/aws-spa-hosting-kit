@@ -26,8 +26,8 @@ try {
     validation.warnings.forEach(warning => console.warn(`  - ${warning}`));
   }
   
-  // Create stack
-  new SpaHostingStack(app, 'SpaHostingStack', config, {
+  // Create stack with name based on projectName
+  new SpaHostingStack(app, `${config.projectName}-HostingStack`, config, {
     env: {
       region: config.aws.region,
       account: config.aws.accountId || process.env.CDK_DEFAULT_ACCOUNT,

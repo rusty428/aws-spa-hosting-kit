@@ -193,7 +193,15 @@ notifications:
 npm run deploy
 ```
 
-This will:
+CDK will display a summary of IAM permissions and security changes, then prompt for confirmation:
+
+```
+Do you wish to deploy these changes (y/n)?
+```
+
+This is a CDK safety feature that requires approval when creating IAM roles and policies. Review the changes and type `y` to proceed.
+
+The deployment will:
 - Create private S3 bucket for static assets
 - Create CloudFront distribution
 - Set up CodePipeline with GitHub integration
@@ -297,24 +305,32 @@ npm run build
 # Deploy infrastructure
 npm run deploy
 
+# Deploy with specific AWS profile
+npm run deploy -- --profile YOUR-PROFILE-NAME
+
+# Skip confirmation prompt (for CI/CD)
+npm run deploy -- --require-approval never
+
 # Destroy infrastructure
 npm run destroy
 
+# Destroy with specific AWS profile
+npm run destroy -- --profile YOUR-PROFILE-NAME
+
 # Synthesize CloudFormation template
-npm run cdk synth
+npx cdk synth
+
+# Synthesize with specific AWS profile
+npx cdk synth --profile YOUR-PROFILE-NAME
 
 # View differences
 npm run cdk diff
 
-# Run tests
-npm test
-
-# Run unit tests only
-npm run test:unit
-
-# Run property-based tests only
-npm run test:property
+# View differences with specific AWS profile
+npm run cdk diff -- --profile YOUR-PROFILE-NAME
 ```
+
+**Note**: The `--` before `--profile` is required to pass arguments through npm to the underlying CDK command.
 
 ## Infrastructure
 
@@ -322,12 +338,65 @@ For detailed information about the CDK infrastructure, deployment process, and d
 
 ## Troubleshooting
 
+### CDK CLI version mismatch
+
+**Error**: `This CDK CLI is not compatible with the CDK library used by your application`
+
+**Solution**: The project uses `npx cdk` to ensure the correct CDK version. All npm scripts (`npm run deploy`, `npm run destroy`) already use the local CDK CLI. If you're running `cdk` commands directly, use `npx cdk` instead or upgrade your global CDK CLI:
+
+```bash
+npm install -g aws-cdk@latest
+```
+
+### Using AWS profiles
+
+If you have multiple AWS profiles configured, pass the `--profile` flag:
+
+```bash
+# Deploy with specific profile
+npm run deploy -- --profile YOUR-PROFILE-NAME
+
+# Synthesize with specific profile
+npx cdk synth --profile YOUR-PROFILE-NAME
+```
+
+**Note**: The `--` before `--profile` is required to pass arguments through npm to the CDK command.
+
 ### Configuration validation failed
 
 Make sure your `config.yml` has:
 - Valid project name (alphanumeric, hyphens, underscores only)
 - Valid GitHub repository URL (format: `https://github.com/owner/repo`)
 - Valid AWS region
+
+### CloudFront distribution timeout
+
+**Error**: `Resource timed out waiting for completion` or `Exceeded attempts to wait` for CloudFront distribution
+
+**Cause**: CloudFront distributions take 15-30 minutes to create. CDK may timeout before CloudFront finishes.
+
+**Solution**:
+
+1. Check the actual status in AWS Console → CloudFormation → SpaHostingStack
+2. If stack shows `ROLLBACK_FAILED`:
+   - Select the stack in CloudFormation console
+   - Click "Delete" (this takes 20-30 minutes as CloudFront deletes)
+   - Once deleted, run `npm run deploy` again
+3. If CloudFront is still creating, wait for it to complete before retrying
+
+**Note**: CloudFront creation cannot be accelerated. Ensure stable network connection during deployment.
+
+### Outdated CDK bootstrap stack
+
+**Warning**: `Bootstrap stack outdated` or version < 21
+
+**Solution**: Update the CDK bootstrap stack:
+
+```bash
+npx cdk bootstrap aws://ACCOUNT-ID/REGION --profile YOUR-PROFILE-NAME
+```
+
+Replace `ACCOUNT-ID` with your AWS account ID and `REGION` with your deployment region (e.g., `us-east-1`).
 - Valid email format (if notifications enabled)
 
 ### Pipeline not triggering

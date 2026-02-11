@@ -52,7 +52,7 @@ This document assumes all prerequisites listed in [PREREQUISITES.md](PREREQUISIT
 1. **Make changes** to TypeScript source files in `src/`
 2. **Build** the project: `npm run build`
 3. **Run tests**: `npm test`
-4. **Synthesize CloudFormation**: `npm run cdk synth`
+4. **Synthesize CloudFormation**: `npx cdk synth`
 5. **Deploy to AWS**: `npm run deploy`
 
 ### Watch Mode
@@ -285,7 +285,7 @@ This creates the CDK toolkit stack with S3 bucket for assets and IAM roles.
 
 ```bash
 # Synthesize CloudFormation template (no deployment)
-npm run cdk synth
+npx cdk synth
 
 # View differences between deployed and local
 npm run cdk diff
@@ -293,9 +293,24 @@ npm run cdk diff
 # Deploy infrastructure
 npm run deploy
 
+# Deploy with specific AWS profile
+npm run deploy -- --profile YOUR-PROFILE-NAME
+
+# Skip confirmation prompt (for CI/CD)
+npm run deploy -- --require-approval never
+
 # Destroy all resources
 npm run destroy
 ```
+
+### Deployment Confirmation
+
+When you run `npm run deploy`, CDK will display:
+1. A detailed table of IAM Statement Changes showing all permissions being created
+2. A table of IAM Policy Changes showing managed policies being attached
+3. A prompt: `Do you wish to deploy these changes (y/n)?`
+
+This confirmation is required because the stack creates security-sensitive resources (IAM roles, policies, S3 bucket policies, etc.). Review the changes and type `y` to proceed.
 
 ### Deployment Stages
 
@@ -437,12 +452,42 @@ npm run build
 
 #### CDK Synthesis Fails
 
-**Problem**: `cdk synth` fails with configuration errors
+**Problem**: `npx cdk synth` fails with configuration errors
 
 **Solution**:
 1. Validate configuration: Check `config/config.yml` format
 2. Check AWS credentials: `aws sts get-caller-identity`
 3. Review error messages for specific validation failures
+
+#### CloudFront Distribution Timeout
+
+**Problem**: Deployment fails with `Resource timed out waiting for completion` for CloudFront distribution
+
+**Cause**: CloudFront distributions take 15-30 minutes to create or update. CDK may timeout before completion.
+
+**Solution**:
+1. Check AWS Console → CloudFormation → SpaHostingStack for actual status
+2. If stack is in `ROLLBACK_FAILED` state:
+   ```bash
+   # Delete the failed stack from CloudFormation console
+   # This takes 20-30 minutes as CloudFront deletes
+   # Then retry deployment
+   npm run deploy
+   ```
+3. If CloudFront is still creating, wait for it to complete
+
+**Prevention**: Ensure stable network connection. CloudFront creation cannot be accelerated.
+
+#### Outdated Bootstrap Stack
+
+**Problem**: Warning `Bootstrap stack outdated` (version < 21)
+
+**Solution**:
+```bash
+npx cdk bootstrap aws://ACCOUNT-ID/REGION --profile YOUR-PROFILE-NAME
+```
+
+This updates the CDK toolkit stack to the latest version.
 
 #### Stack Deployment Fails
 
@@ -479,12 +524,12 @@ npm run build
 
 1. **Enable CDK Debug Output**:
    ```bash
-   npm run cdk synth -- --verbose
+   npx cdk synth --verbose
    ```
 
 2. **View CloudFormation Template**:
    ```bash
-   npm run cdk synth > template.json
+   npx cdk synth > template.json
    ```
 
 3. **Check Stack Drift**:
