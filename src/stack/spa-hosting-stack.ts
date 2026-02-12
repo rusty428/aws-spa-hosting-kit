@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import { Tags } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -36,6 +37,9 @@ export class SpaHostingStack extends cdk.Stack {
 
     this.config = config;
 
+    // Apply tags to all resources in this stack
+    this.applyTags();
+
     // Create S3 bucket for static hosting
     this.bucket = this.createS3Bucket();
 
@@ -69,6 +73,23 @@ export class SpaHostingStack extends cdk.Stack {
 
     // Trigger initial pipeline execution after stack deployment (if connection is authorized)
     this.triggerInitialPipelineExecution();
+  }
+
+  /**
+   * Apply tags to all resources in the stack
+   * Includes default tags (projectName, ManagedBy) and user-defined tags
+   */
+  private applyTags(): void {
+    // Apply default tags
+    Tags.of(this).add('ProjectName', this.config.projectName);
+    Tags.of(this).add('ManagedBy', 'aws-spa-hosting-kit');
+
+    // Apply user-defined tags
+    if (this.config.tags) {
+      Object.entries(this.config.tags).forEach(([key, value]) => {
+        Tags.of(this).add(key, value);
+      });
+    }
   }
 
   /**

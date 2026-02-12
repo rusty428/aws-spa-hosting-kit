@@ -9,6 +9,7 @@ export interface HostingConfig {
   domain?: DomainConfig;
   notifications?: NotificationConfig;
   build?: BuildConfig;
+  tags?: Record<string, string>;
 }
 
 export interface GitHubConfig {

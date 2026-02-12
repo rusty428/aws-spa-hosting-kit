@@ -70,6 +70,23 @@ notifications:
 #   installCommand: "npm ci"
 
 # ============================================================================
+# OPTIONAL: Resource Tags
+# ============================================================================
+# Tags are applied to all taggable AWS resources for cost allocation and organization
+# Useful for tracking costs per project/team in AWS Cost Explorer
+# 
+# Default tags automatically applied:
+#   - ProjectName: <your projectName>
+#   - ManagedBy: aws-spa-hosting-kit
+# 
+# Add custom tags below (key-value pairs):
+# tags:
+#   Environment: "production"
+#   Team: "frontend"
+#   CostCenter: "engineering"
+#   Owner: "team@example.com"
+
+# ============================================================================
 # FUTURE: Multi-Environment Configuration (Scaffolding Only)
 # ============================================================================
 # This is commented scaffolding for future multi-environment support

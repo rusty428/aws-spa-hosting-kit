@@ -262,7 +262,22 @@ build:
   outputDirectory: "dist"  # Build output folder (default: "dist")
   buildCommand: "npm run build"  # Build command (default: "npm run build")
   installCommand: "npm ci"  # Install command (default: "npm ci")
+
+tags:  # Resource tags for cost allocation and organization
+  Environment: "production"
+  Team: "frontend"
+  CostCenter: "engineering"
+  Owner: "team@example.com"
 ```
+
+**Note on Tags**: All resources created by this kit will be tagged with:
+- Default tags: `ProjectName` (your projectName) and `ManagedBy: aws-spa-hosting-kit`
+- Custom tags: Any tags you define in the `tags` section
+
+Tags are useful for:
+- Cost allocation and tracking in AWS Cost Explorer
+- Resource organization across multiple projects/teams
+- Compliance and governance requirements
 
 ## Supported SPA Frameworks
 

@@ -5,6 +5,15 @@ All notable changes to the AWS SPA Hosting Kit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-12
+
+### Added
+- Resource tagging support for cost allocation and organization
+- Optional `tags` configuration field for custom resource tags
+- Default tags automatically applied: `ProjectName` and `ManagedBy: aws-spa-hosting-kit`
+- Tag validation for AWS constraints (key/value length and character restrictions)
+- Tags applied to all taggable resources: S3, CloudFront, CodeBuild, CodePipeline, Lambda, SNS, EventBridge, IAM, CloudWatch Logs
+
 ## [1.1.0] - 2026-02-11
 
 ### Added

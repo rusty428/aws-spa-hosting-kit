@@ -2,7 +2,7 @@
 # Configured for the sample SPA: https://github.com/rusty428/aws-spa-react-example
 
 # Project name - used for pipeline and resource naming
-projectName: "aws-migration-sample"
+projectName: "aws-spa-react-example"
 
 github:
   repositoryUrl: "https://github.com/rusty428/aws-spa-react-example"
@@ -20,3 +20,11 @@ build:
   outputDirectory: "dist"
   buildCommand: "npm run build"
   installCommand: "npm ci"
+
+# Optional: Add tags for cost allocation and resource organization
+tags:
+  Environment: "aws-spa-hosting-kit"
+  Project: "aws-spa-react-example"
+
+  # Team: "frontend"
+  # CostCenter: "engineering"

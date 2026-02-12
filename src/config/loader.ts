@@ -74,6 +74,26 @@ export class ConfigLoader {
     const errors: string[] = [];
     const warnings: string[] = [];
 
+    // Validate tags if provided
+    if (config.tags) {
+      Object.entries(config.tags).forEach(([key, value]) => {
+        // AWS tag key constraints
+        if (key.length > 128) {
+          errors.push(`Tag key '${key}' exceeds 128 characters`);
+        }
+        if (!/^[\w\s.:/=+@-]*$/.test(key)) {
+          errors.push(`Tag key '${key}' contains invalid characters. Use only letters, numbers, spaces, and +-=._:/@`);
+        }
+        // AWS tag value constraints
+        if (value.length > 256) {
+          errors.push(`Tag value for key '${key}' exceeds 256 characters`);
+        }
+        if (!/^[\w\s.:/=+@-]*$/.test(value)) {
+          errors.push(`Tag value for key '${key}' contains invalid characters. Use only letters, numbers, spaces, and +-=._:/@`);
+        }
+      });
+    }
+
     // Validate required fields
     if (!config.projectName) {
       errors.push('Missing required field: projectName');
