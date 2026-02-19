@@ -3,6 +3,7 @@ import { Tags } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as codeconnections from 'aws-cdk-lib/aws-codeconnections';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
@@ -130,6 +131,21 @@ export class SpaHostingStack extends cdk.Stack {
       },
     });
 
+    // Prepare domain configuration if provided
+    const domainConfig: any = {};
+    if (this.config.domain?.customDomain && this.config.domain?.certificateArn) {
+      const domainNames = [this.config.domain.customDomain];
+      if (this.config.domain.alternativeDomains) {
+        domainNames.push(...this.config.domain.alternativeDomains);
+      }
+      domainConfig.domainNames = domainNames;
+      domainConfig.certificate = acm.Certificate.fromCertificateArn(
+        this,
+        'Certificate',
+        this.config.domain.certificateArn
+      );
+    }
+
     const distribution = new cloudfront.Distribution(this, 'SpaDistribution', {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
@@ -151,6 +167,7 @@ export class SpaHostingStack extends cdk.Stack {
           ttl: cdk.Duration.minutes(5),
         },
       ],
+      ...domainConfig,
     });
 
     // Apply OAC to the CloudFront distribution's S3 origin

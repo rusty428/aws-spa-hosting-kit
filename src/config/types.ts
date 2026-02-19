@@ -24,6 +24,7 @@ export interface AwsConfig {
 
 export interface DomainConfig {
   customDomain?: string;
+  alternativeDomains?: string[];
   certificateArn?: string;
 }
 

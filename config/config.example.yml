@@ -36,8 +36,19 @@ aws:
 # ============================================================================
 # Uncomment to use a custom domain with your CloudFront distribution
 # domain:
-#   customDomain: "www.example.com"
+#   customDomain: "example.com"
 #   # ACM certificate ARN (must be in us-east-1 for CloudFront)
+#   certificateArn: "arn:aws:acm:us-east-1:123456789012:certificate/abc123"
+
+# Multi-Domain Configuration Example:
+# Use alternativeDomains to serve content on multiple domains with a single distribution
+# All domains must be covered by the ACM certificate as Subject Alternative Names (SANs)
+# domain:
+#   customDomain: "example.com"
+#   alternativeDomains:
+#     - "www.example.com"
+#     - "example.net"
+#     - "www.example.net"
 #   certificateArn: "arn:aws:acm:us-east-1:123456789012:certificate/abc123"
 
 # ============================================================================
