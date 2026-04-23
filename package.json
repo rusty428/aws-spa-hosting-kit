@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rusty428/aws-spa-hosting-kit.git"
+    "url": "git+https://github.com/rustynations/aws-spa-hosting-kit.git"
   },
   "keywords": [
     "aws",
@@ -31,9 +31,9 @@
   "author": "Rusty Nations",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rusty428/aws-spa-hosting-kit/issues"
+    "url": "https://github.com/rustynations/aws-spa-hosting-kit/issues"
   },
-  "homepage": "https://github.com/rusty428/aws-spa-hosting-kit#readme",
+  "homepage": "https://github.com/rustynations/aws-spa-hosting-kit#readme",
   "dependencies": {
     "aws-cdk-lib": "^2.238.0",
     "constructs": "^10.4.5",
